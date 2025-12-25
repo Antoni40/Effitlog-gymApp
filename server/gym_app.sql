@@ -33,13 +33,6 @@ CREATE TABLE `exercises` (
   `muscle_group` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `exercises`
---
-
-INSERT INTO `exercises` (`id`, `name`, `muscle_group`) VALUES
-(1, 'bench press', 'chest');
-
 -- --------------------------------------------------------
 
 --
