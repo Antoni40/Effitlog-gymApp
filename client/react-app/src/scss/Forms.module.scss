@@ -1,0 +1,22 @@
+//chyba trzeba używać use
+@use './mixins.scss' as m;
+@use './variables.scss' as v;
+
+.FormContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  .Form {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+
+    label, input, button {
+      display: block;
+      margin: 5px 0;
+      font-size: 1.5rem;
+    }
+  }
+}

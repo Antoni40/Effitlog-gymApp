@@ -1,0 +1,45 @@
+@use './mixins.scss' as m;
+@use './variables.scss' as v;
+
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  background-color: v.$black;
+  height: 8vh;
+  align-items: center;
+
+  a {
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+  }
+}
+.mainContent {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: 92vh;
+}
+.appPictureContainer {
+  background-color: v.$white-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.appTitleContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: v.$dark-blue;
+}
+img {
+  border-radius: 10px;
+}
+button {
+  @include m.button-styles(black, white)
+}
+button:hover {
+  cursor: pointer;
+}

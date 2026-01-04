@@ -1,0 +1,41 @@
+@use './mixins.scss' as m;
+@use './variables.scss' as v;
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  background-color: v.$grey;
+  color: white;
+  font-family: 'Arial', sans-serif;
+}
+
+nav a{
+  color: white;
+  margin: 10px;
+}
+
+.page-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 300px;
+
+  .return-button{
+    @include m.button-styles(black, v.$white-color);
+    font-size: 2rem;
+  }
+
+  .return-button:hover{
+    @include m.button-styles(white, v.$light-blue);
+    cursor: pointer;
+  }
+
+  p {
+    margin-top: 10px;
+  }
+}

@@ -27,16 +27,21 @@ export async function createUser(name, surname, email, password){
     INSERT INTO users(name, surname, email, password) 
     VALUES (?, ?, ?, ?)`, [name, surname, email, password]);
     const id = result.insertId;
+    
     return getUser(id);
+}
+
+export async function checkUserData(email, password){
+  const [result] = await pool.query(`
+    SELECT id FROM users WHERE email= ? AND password = ?
+  `, [email, password]);
+
+  return result[0];
 }
 
 export async function deleteUser(id){
   const result = await pool.query(`DELETE FROM users WHERE id = ?`, [id]);
 }
 
-// const exercises = await getExercises();
-// console.log(exercises);
-// const user = await createUser("Jan", "Kowalski", "Jan@Kowalski.pl", "PFD312FSDA3");
-// console.log(user);
 
 

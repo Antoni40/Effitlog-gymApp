@@ -1,30 +1,52 @@
 import express from 'express'
-import {getUsers, getUser, createUser, deleteUser} from './database.js'
+import cors from 'cors'
+import {getUsers, getUser, createUser, deleteUser, checkUserData,} from './database.js'
 
 const app = express();
 
 app.use(express.json())
 
+app.use(cors({
+  //temporary you need to change that to specific orgin
+  origin: '*'
+}))
+
+//prevents server crashing
 app.use((err, req, res, next) => {
   console.error(err.stack)
   res.status(500).send('Something broke!')
 })
 
-app.get("/users", async (req, res) => {
-  const users = await getUsers();
-  res.send(users);
-})
+//for login
+app.post('/api/checkuserdata', async (req, res) => {
+  const { email, password } = req.body;
+  const result = await checkUserData(email, password);
 
-app.get("/user:id", async (req, res) => {
-  const id = req.params.id;
-  const user = getUser(id);
-  res.send(user);
-})
+  if(!result){
+    //401 - not valid authentication
+    res.status(401).json({success: false});
+  } else {
+    //200 - OK
+    res.status(200).json({success: true});
+  }
+});
 
-app.post("/users", async (req, res) => {
-  const {name, surname, email, password} = req.body;
-  const user = await createUser(name, surname, email, password);
-  res.status(201).send(user);
+app.get('/api/getusers', async (req, res) => {
+    const result = await getUsers();
+    res.status(200).json(result);
+});
+
+app.post('/api/registerUser', async (req, res) => {
+  const { first_name, surname, email, password} = req.body;
+  const result = await createUser(first_name, surname, email, password);
+
+  if(!result){
+    //400 - bad request
+    res.status(400).json({success: false});
+  } else {
+    //201 - created
+    res.status(201).json({success: true});
+  }
 })
 
 app.listen(8080, () => {

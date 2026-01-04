@@ -1,0 +1,8 @@
+@use './mixins.scss' as m;
+@use './variables.scss' as v;
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
