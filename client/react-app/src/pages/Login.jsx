@@ -52,7 +52,7 @@ function Login({setLoggedIn}){
         onSubmit={handleLogin} 
         className={styles.Form}>
 
-        <label htmlFor="login">Login:</label>
+        <label htmlFor="login">E-mail:</label>
         <input type="email" 
           id="login" 
           name="login" 

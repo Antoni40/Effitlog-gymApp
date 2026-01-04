@@ -12,10 +12,10 @@ function Start(){
             </div>
             <div className="buttons-container">
               <Link to="/login">
-                Log-in
+                Sign-in
               </Link>
               <Link to="/register">
-                Sign-in
+                Sign-up
               </Link>
             </div>
           </nav>

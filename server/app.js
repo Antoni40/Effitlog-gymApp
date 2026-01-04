@@ -1,5 +1,7 @@
 import express from 'express'
 import cors from 'cors'
+import bcrypt from 'bcrypt';
+
 import {getUsers, getUser, createUser, deleteUser, checkUserData,} from './database.js'
 
 const app = express();
@@ -20,15 +22,25 @@ app.use((err, req, res, next) => {
 //for login
 app.post('/api/checkuserdata', async (req, res) => {
   const { email, password } = req.body;
-  const result = await checkUserData(email, password);
 
-  if(!result){
+  const result = await checkUserData(email);
+  console.log(result);
+
+  if(!result){  
     //401 - not valid authentication
-    res.status(401).json({success: false});
-  } else {
-    //200 - OK
-    res.status(200).json({success: true});
+    //is it worth to use return there
+    return res.status(401).json({success: false, message: "account with that email doesn't exist"});
   }
+
+  const passwordMatch = await bcrypt.compare(password, result.password);
+
+  if (!passwordMatch){
+    return res.status(401).json({success: false, message: "wrong password" });
+  } 
+
+  //200 - OK
+  res.status(200).json({success: true});
+
 });
 
 app.get('/api/getusers', async (req, res) => {
@@ -38,7 +50,8 @@ app.get('/api/getusers', async (req, res) => {
 
 app.post('/api/registerUser', async (req, res) => {
   const { first_name, surname, email, password} = req.body;
-  const result = await createUser(first_name, surname, email, password);
+  const password_hash = await bcrypt.hash(password, 10);
+  const result = await createUser(first_name, surname, email, password_hash);
 
   if(!result){
     //400 - bad request
