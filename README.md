@@ -15,22 +15,38 @@ The app communicates with a **MySQL database** through a **REST API** built with
 - **Express**
 - **MySQL**
 
-## Instalation
+## Installation
 
-### Install frontend dependencies
+### 1. Install frontend dependencies
 ```bash
-cd client/react-app
+cd ../client/react-app
 npm install
 ```
 
-### Install backend dependencies
+### 2. Install backend dependencies
 ```bash
 cd server
 npm install
 ```
 
-### Environment configuration
-Create .env file in server directory and provide all environment variables (database credentials)
+### 3. Environment configuration
+Create **.env** file in **server** directory and provide all environment variables (database credentials)
 
-### Database setup
-Set up a MySQL database and ensure the conection details match the values in the .env file
+### 4. Database setup
+Set up a MySQL database and ensure the connection details match the values in the .env file
+
+### Run the project
+#### 1. Run backend
+```bash
+cd server
+npm run dev
+```
+#### 2. Run frontend
+```bash
+cd ../client/react-app
+npm run dev
+```
+
+## Notes
+- Frontend runs on port 5173
+- Backend runs on port 8080
