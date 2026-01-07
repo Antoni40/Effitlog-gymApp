@@ -5,5 +5,32 @@ The app communicates with a **MySQL database** through a **REST API** built with
 
 ## Technologies
 
-- **Frontend:** React 18, Vite, SCSS, React Router  
-- **Backend:** Node.js, Express, MySQL, CORS
+### Frontend
+- **React**
+- **Vite**
+- **SCSS (Sass)**
+
+### Backend
+- **Node.js**
+- **Express**
+- **MySQL**
+
+## Instalation
+
+### Install frontend dependencies
+```bash
+cd client/react-app
+npm install
+```
+
+### Install backend dependencies
+```bash
+cd server
+npm install
+```
+
+### Environment configuration
+Create .env file in server directory and provide all environment variables (database credentials)
+
+### Database setup
+Set up a MySQL database and ensure the conection details match the values in the .env file
