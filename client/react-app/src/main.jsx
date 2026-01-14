@@ -1,21 +1,23 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Start from './pages/Start.jsx'
+import LandingPage from './pages/LandingPage.jsx'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
-import Home from './pages/Home.jsx'
+import Dashboard from './pages/Dashboard.jsx'
 import Users from './Users.jsx'
+import About from './pages/About.jsx';
 import './scss/main.scss'
 
 const router = createBrowserRouter([
-  {path: "/", element: <Start />},
+  {path: "/", element: <LandingPage />},
   {path: "/login", element: <Login />},
   {path: "/register", element: <Register />},
-  {path: "/home", element: <Home />},
+  {path: "/dashboard", element: <Dashboard />},
   {path: "*", element: <NotFoundPage />}, 
-  {path: "/users", element: <Users />}
+  {path: "/users", element: <Users />},
+  {path: "/about", element: <About />}
 ])
 
 createRoot(document.getElementById('root')).render(

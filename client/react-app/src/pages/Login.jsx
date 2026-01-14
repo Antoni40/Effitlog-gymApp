@@ -27,10 +27,8 @@ function Login({setLoggedIn}){
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        email: loginData.login,
-        password: loginData.password
-      })
+      body: JSON.stringify({ email: loginData.login, password: loginData.password}),
+            credentials: 'include'
     })
     
       .then(res => {
@@ -38,7 +36,7 @@ function Login({setLoggedIn}){
       })
       .then(data => {
         if(data.success){
-          navigate('/home')
+          navigate('/dashboard')
         } else {
           alert("Incorrect data!");
         }
