@@ -15,7 +15,7 @@ function Home(){
         if(success){
           alert("You are logged in");
         } else {
-          alert("You are not logged in");
+          alert("You are not logged in, your session expired");
         }
       })
 
