@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
 import styles from '../scss/Forms.module.scss'
 
@@ -43,44 +43,49 @@ function Register(){
   }
 
   return (
-    <div className={styles.FormContainer}>
+    <div className={styles.contentContainer}>
+      <div className={styles.signInContainer}>
+        <h1>Sign-up</h1>
+        <div className={styles.FormContainer}>
+          <form method='POST'
+            onSubmit={handleSubmit}
+            className={styles.Form}>
 
-        <form method='POST'
-          onSubmit={handleSubmit}
-          className={styles.Form}>
+            <label htmlFor="name">Name</label>
+            <input type="text" 
+              id="name" 
+              name="first_name"
+              value={registerData.first_name}
+              onChange={handleChange}/>
 
-          <label htmlFor="name">Name</label>
-          <input type="text" 
-            id="name" 
-            name="first_name"
-            value={registerData.first_name}
-            onChange={handleChange}/>
+            <label htmlFor="surname">Surname</label>
+            <input type="text" 
+              id="surname" 
+              name="surname"
+              value={registerData.surname}
+              onChange={handleChange}/>
 
-          <label htmlFor="surname">Surname</label>
-          <input type="text" 
-            id="surname" 
-            name="surname"
-            value={registerData.surname}
-            onChange={handleChange}/>
+            <label htmlFor="email">E-mail</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email"
+              value={registerData.email}
+              onChange={handleChange}/>
+            
+            <label htmlFor="password">Password</label>
+            <input 
+              type="password" 
+              id="password"
+              name="password"
+              value={registerData.password}
+              onChange={handleChange}/>
 
-          <label htmlFor="email">E-mail</label>
-          <input 
-            type="email" 
-            id="email" 
-            name="email"
-            value={registerData.email}
-            onChange={handleChange}/>
-          
-          <label htmlFor="password">Password</label>
-          <input 
-            type="password" 
-            id="password"
-            name="password"
-            value={registerData.password}
-            onChange={handleChange}/>
-
-            <button>Sign-up</button>
-        </form>
+              <button>Sign-up</button>
+          </form>
+        </div>
+        <Link to="/login">Or Sign-in</Link>
+      </div>
     </div>
   );
 }

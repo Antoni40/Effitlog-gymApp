@@ -1,0 +1,21 @@
+@use './mixins.scss' as m;
+@use './variables.scss' as v;
+
+.mainContainer {
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 2rem;
+
+  button {
+    font-size: 1.2rem;
+    background-color: v.$very-light-blue;
+    color: white;
+  }
+
+  button:hover {
+    background-color: v.$white-color;
+    color: black;
+  }
+}

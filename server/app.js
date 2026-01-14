@@ -32,7 +32,7 @@ function cookieJwtAuth(req, res, next){
     next();
   } catch (err) {
     res.clearCookie("token");
-    res.status(401).json({ error: "Unauthorized"} );
+    res.status(401).json({ error: "Unauthorized", success: false} );
   }
 }
 
@@ -63,10 +63,10 @@ app.post('/api/checkUserData', async (req, res) => {
 
   const userData = {id: result.id, name: result.name, email: result.email};
   //the expires time is for testing purposes
-  const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '30s' })
+  const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '15m' })
 
   res.cookie('token', token, {
-    httpOnly: true,
+    httpOnly: true
   })
   //200 - OK
   res.status(200).json({success: true});
@@ -94,6 +94,26 @@ app.post('/api/registerUser', async (req, res) => {
 
 app.get('/api/isUserLoggedIn', cookieJwtAuth, (req, res) => {
   res.status(200).json({ success: true })
+});
+
+//maybe I should use the cookieJwtAuth but I don't know now
+app.get('/api/logout', (req, res) => {
+  if(req.cookies.token){
+    res.clearCookie("token");
+    res.status(200).json({success: true});
+  } else {
+    res.status(401).json({success: true});
+  }
+});
+
+app.get('/api/getName', cookieJwtAuth, (req, res) => {
+  
+  const decodedUser = jwt.decode(req.cookies.token, process.env.JWT_SECRET);
+
+  console.log(decodedUser);
+
+  res.status(200).json(decodedUser.name);
+
 })
 
 app.listen(8080, () => {

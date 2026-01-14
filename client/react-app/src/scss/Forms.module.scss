@@ -2,21 +2,62 @@
 @use './mixins.scss' as m;
 @use './variables.scss' as v;
 
-.FormContainer {
+
+.contentContainer {
   display: flex;
   justify-content: center;
-  align-items: center;
   height: 100vh;
 
-  .Form {
+  h1 {
+    font-size: 2.5rem;
+  }
+  .signInContainer {
+    height: fit-content;
     display: flex;
     flex-direction: column;
-    width: 20%;
+    margin-top: 5%;
+    background-color: v.$light-grey;
+    padding: 50px;
+    border-radius: 15px;
 
-    label, input, button {
-      display: block;
-      margin: 5px 0;
-      font-size: 1.5rem;
+    a {
+      text-align: center;
+      color: #c0c0c0;
+      margin-top: 3%;
+
+    }
+
+    .FormContainer {
+      margin-top: 5%;
+      display: flex;
+      align-items: center;
+
+      .Form {
+        display: flex;
+        flex-direction: column;
+
+        label, input, button {
+          display: block;
+          margin: 5px;
+          font-size: 2rem;
+          border-radius: 5px;
+        }
+
+        button {
+          margin-top: 8%;
+          background-color: v.$very-light-blue;
+          color: white;
+        }
+
+        button:hover {
+          background-color: v.$white-color;
+          color: black;
+        }
+
+        input {
+          border: 1px solid black;
+        }
+      }
     }
   }
 }
