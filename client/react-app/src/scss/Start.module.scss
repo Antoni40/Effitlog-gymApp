@@ -22,27 +22,28 @@ nav {
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-rows: 92vh;
-}
-.appPictureContainer {
-  background-color: v.$white-color;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  img {
-    width: 55%;
+
+  .appPictureContainer {
+    background-color: v.$white-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img {
+      width: 55%;
+    }
   }
-}
-.appTitleContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: v.$dark-blue;
-  h1 {
-    font-size: 4rem;
-  }
-  p {
-    font-size: 2rem;
+  .appTitleContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: v.$dark-blue;
+    h1 {
+      font-size: 4rem;
+    }
+    p {
+      font-size: 2rem;
+    }
   }
 }
 img {
@@ -53,4 +54,14 @@ button {
 }
 button:hover {
   cursor: pointer;
+}
+
+@media screen and (max-width: 768px){
+  .mainContent {
+    grid-template-columns: auto;
+
+    .appPictureContainer {
+      padding-top: 2vh;
+    }
+  }
 }

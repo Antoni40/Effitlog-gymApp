@@ -1,0 +1,33 @@
+@use './mixins' as m;
+@use './variables' as v;
+
+a {
+  color: white;
+  margin: 5px;
+}
+.editContainer {
+  form {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2rem;
+    .exerciseContainer {
+      display: block;
+      background-color: v.$light-grey;
+      width: fit-content;
+      padding: 20px;
+      input, select {
+        font-size: 1.2rem;
+        border-radius: 5px;
+        border: none;
+        padding: 2px;
+      }
+      label{
+        display: block;
+      }
+      margin-bottom: 20px;
+    }
+    .submitButton {
+      width: fit-content;
+    }
+  }
+}

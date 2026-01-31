@@ -51,11 +51,11 @@ function Login({setLoggedIn}){
 
     fetch("http://localhost:8080/api/checkUserData", {
       method: "POST",
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ email: loginData.login, password: loginData.password}),
-            credentials: 'include'
     })
       .then(res => {
         return res.json();
@@ -79,7 +79,7 @@ function Login({setLoggedIn}){
         <h1>Sign-in</h1>
         <div className={styles.FormContainer}>
           <form method='POST' 
-            onSubmit={handleLogin} 
+            onSubmit={(e) => {handleLogin(e)}} 
             className={styles.Form}>
 
             <label htmlFor="login">E-mail:</label>

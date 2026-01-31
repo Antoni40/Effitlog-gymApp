@@ -3,15 +3,10 @@ import cors from 'cors'
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 import cookieParser from 'cookie-parser';
-import {getUsers, getUser, createUser, deleteUser, checkUserData,} from './database.js'
+import {getUsers, getUser, createUser, deleteUser, checkUserData, getWorkouts, getWorkout, setUserWorkoutDone, getExercises, addWorkout} from './database.js'
 
 const app = express();
 
-//for testing
-app.use((req, res, next) => {
-  console.log(`Server got: ${req.method} ${req.url}`);
-  next();
-});
 
 app.use(express.json())
 
@@ -63,7 +58,7 @@ app.post('/api/checkUserData', async (req, res) => {
 
   const userData = {id: result.id, name: result.name, email: result.email};
   //the expires time is for testing purposes
-  const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '15m' })
+  const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '1h' })
 
   res.cookie('token', token, {
     httpOnly: true
@@ -110,10 +105,47 @@ app.get('/api/getName', cookieJwtAuth, (req, res) => {
   
   const decodedUser = jwt.decode(req.cookies.token, process.env.JWT_SECRET);
 
+
   console.log(decodedUser);
 
   res.status(200).json(decodedUser.name);
 
+})
+
+app.get('/api/calendar/getWorkouts', cookieJwtAuth, async (req, res) => {
+  console.log(req.user);
+  const result = await getWorkouts(req.user.id);
+  res.status(200).json({success: true, workouts: result});
+
+})
+
+app.get('/api/getWorkout/:id', cookieJwtAuth, async (req, res) => {
+  const workoutID = req.params.id;
+  const result = await getWorkout(workoutID, req.user.id);
+  res.status(200).json({success: true, result: result});
+
+})
+
+app.get('/api/setWorkoutDone/:id', cookieJwtAuth, async (req, res) => {
+  const userWorkoutID = req.params.id;
+  const userID = req.user.id;
+  console.log(userID, userWorkoutID);
+  const result = await setUserWorkoutDone(userID, userWorkoutID);
+  res.status(200).json({success: true, result: result});
+
+  
+})
+
+app.get('/api/getExercises', cookieJwtAuth, async (req, res) => {
+  const result = await getExercises();
+  res.status(200).json({success: true, result: result});
+})
+
+app.post('/api/setNewWorkout', cookieJwtAuth, async(req, res) => {
+  const {workoutData, workoutRows} = await req.body;
+  console.log(typeof workoutRows);
+  const result = await addWorkout(workoutData.date, workoutData.workout_title, workoutRows, req.user.id);
+  res.status(200).json({success: true});
 })
 
 app.listen(8080, () => {

@@ -1,21 +1,98 @@
 @use './mixins.scss' as m;
 @use './variables.scss' as v;
 
-.mainContainer {
-  margin-top: 10%;
+.greeting {
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: 2rem;
+  margin-top: 20px;
+}
 
-  button {
+button {
     font-size: 1.2rem;
     background-color: v.$very-light-blue;
     color: white;
-  }
+}
 
-  button:hover {
+button:hover {
     background-color: v.$white-color;
     color: black;
+}
+.mainBlocksContainer {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: 60vh;
+
+  .progressContainer {
+    .chartContainer {
+      height: 70%;
+      width: 70%;
+    }
+  }
+  section {
+    text-align: center;
+
+    .changesButtons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .notActive {
+    visibility: hidden;
+  }
+
+  .calendarContainer {
+    overflow: auto;
+    height: 50vh;
+    .subtitle {
+      color: rgb(133, 133, 133);
+      
+    }
+    ul {
+      list-style-type: none;
+      li {
+        display: block;
+        background-color: white;
+        color: black;
+        font-size: 1.1rem;
+        margin: 10px 5px;
+        border-radius: 5px;
+        padding: 10px;
+        text-align: left;
+      }
+    }
+  }
+  
+  .manipulationContainer, .progressContainer, .closestWorkouts {
+    background-color: v.$light-grey;
+    margin: 20px;
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .progressContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+//i don't know if better is mixing styles
+@media screen and (max-width: 768px) {
+  .mainBlocksContainer {
+    grid-template-columns: auto;
+
+    .closestWorkouts {
+      order: -2;
+    }
+    .progressContainer {
+      order: -1;
+    }
+    // .manipulationContainer {
+    //   order: 3;
+    // }
   }
 }

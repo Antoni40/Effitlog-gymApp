@@ -1,0 +1,57 @@
+@use './mixins' as m;
+@use './variables' as v;
+
+.pageContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  h2 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .formContainer{
+    width: 30%;
+    background-color: v.$light-grey;
+    padding: 40px;
+    border-radius: 20px;
+    form {
+      display: flex;
+      flex-direction: column;
+      font-size: 1rem;
+      .exercisesContainer {
+        max-height: 60vh;
+        overflow-y: auto;
+        width: 100%;
+        margin: 10px 0;
+      }
+        select {
+          display: block;
+        }
+        input, select {
+        background-color: white;
+        color: black;
+        border: none;
+        margin: 10px 5px;
+        border-radius: 5px;
+        padding: 10px;
+        text-align: left;
+        margin-left: 10px;
+        }
+        .workoutCountSection {
+        button {
+          margin-right: 10px;
+        }
+        .primary {
+          background: #108a25;
+        }
+
+        .secondary {
+          background: #8b1c1c;
+        }
+      }
+      button {
+        background-color: rgb(23, 96, 233);
+      }
+    }
+  }
+}

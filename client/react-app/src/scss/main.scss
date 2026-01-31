@@ -16,6 +16,7 @@ body{
 nav a{
   color: white;
   margin: 10px;
+  cursor: pointer;
 }
 
 .page-container{
@@ -38,4 +39,7 @@ nav a{
   p {
     margin-top: 10px;
   }
+}
+button {
+  width: fit-content;
 }
