@@ -7,6 +7,32 @@
   box-sizing: border-box;
 }
 
+a {
+  color: white;
+  margin: 5px;
+}
+
+img {
+  border-radius: 10px;
+}
+button {
+  @include m.button-styles(black, white)
+}
+button:hover {
+  cursor: pointer;
+}
+
+button {
+    font-size: 1.2rem;
+    background-color: v.$very-light-blue;
+    color: white;
+}
+
+button:hover {
+    background-color: v.$white-color;
+    color: black;
+}
+
 body{
   background-color: v.$grey;
   color: white;
@@ -39,7 +65,4 @@ nav a{
   p {
     margin-top: 10px;
   }
-}
-button {
-  width: fit-content;
 }

@@ -1,5 +1,6 @@
 @use './mixins.scss' as m;
 @use './variables.scss' as v;
+@use './main.scss';
 
 .mainContainer {
   display: flex;

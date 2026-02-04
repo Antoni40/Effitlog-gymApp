@@ -66,11 +66,12 @@ function AddWorkout(){
       <h1>Add workout</h1>
       <form onSubmit={(e) => {handleSubmit(e)}}>
         <h2>Workout info</h2>
+          <label htmlFor="">Workout name</label>
           <input type="text" 
             name="workout_title"
             placeholder='workout name'
             onChange={(e) => {handleWorkoutDataChange(e.target.name, e.target.value)}}/>
-
+          <label htmlFor="">Workout date</label>
           <input type="date" 
             name="date"
             onChange={(e) => {handleWorkoutDataChange(e.target.name, e.target.value)}}

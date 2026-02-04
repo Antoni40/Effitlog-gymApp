@@ -1,5 +1,6 @@
 @use './mixins.scss' as m;
 @use './variables.scss' as v;
+@use './main.scss';
 
 
 nav {
@@ -46,15 +47,7 @@ nav {
     }
   }
 }
-img {
-  border-radius: 10px;
-}
-button {
-  @include m.button-styles(black, white)
-}
-button:hover {
-  cursor: pointer;
-}
+
 
 @media screen and (max-width: 768px){
   .mainContent {

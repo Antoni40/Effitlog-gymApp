@@ -1,5 +1,6 @@
 @use './mixins' as m;
 @use './variables' as v;
+@use './main.scss';
 
 .pageContainer {
   display: flex;
@@ -19,7 +20,7 @@
       flex-direction: column;
       font-size: 1rem;
       .exercisesContainer {
-        max-height: 60vh;
+        max-height: 33vh;
         overflow-y: auto;
         width: 100%;
         margin: 10px 0;
@@ -42,15 +43,15 @@
           margin-right: 10px;
         }
         .primary {
-          background: #108a25;
+          background: v.$light-green;
         }
 
         .secondary {
-          background: #8b1c1c;
+          background: v.$light-red;
         }
       }
       button {
-        background-color: rgb(23, 96, 233);
+        background-color: v.$light-blue;
       }
     }
   }

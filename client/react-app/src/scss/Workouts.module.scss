@@ -1,5 +1,6 @@
 @use './mixins' as m;
 @use './variables' as v;
+@use './main.scss';
 
 .workoutListContainer {
   display: flex;
@@ -21,8 +22,5 @@
         }
       }
     }
-    // button {
-    //   width: 20%;
-    // }
 }
 

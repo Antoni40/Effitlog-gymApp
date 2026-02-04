@@ -145,7 +145,14 @@ app.post('/api/setNewWorkout', cookieJwtAuth, async(req, res) => {
   const {workoutData, workoutRows} = await req.body;
   console.log(typeof workoutRows);
   const result = await addWorkout(workoutData.date, workoutData.workout_title, workoutRows, req.user.id);
-  res.status(200).json({success: true});
+  res.status(200).json({success: true, result });
+})
+
+app.post('/api/setWorkoutChanges/:id', cookieJwtAuth, async(req, res) => {
+  const workoutID = req.params.id;
+  const {workoutData, workoutRows} = await req.body;
+  const result = await setWorkoutChanges(workoutID, workoutData.workout_title, workoutData.date, workoutRows, req.user.id);
+  res.result(200).json({success: true});
 })
 
 app.listen(8080, () => {

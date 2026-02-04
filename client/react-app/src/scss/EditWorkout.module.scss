@@ -1,10 +1,7 @@
 @use './mixins' as m;
 @use './variables' as v;
+@use './main.scss';
 
-a {
-  color: white;
-  margin: 5px;
-}
 .editContainer {
   form {
     display: flex;

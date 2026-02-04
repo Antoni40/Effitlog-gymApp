@@ -58,7 +58,7 @@ export async function getWorkouts(userId){
 //exercises in workout
 export async function getWorkout(workoutID, userID){
   const [result] = await pool.query(`
-        SELECT users_workouts.id AS user_workout_id, workouts.id AS workout_id, workouts.name AS name, workouts.description AS description, exercises_in_workouts.sets AS sets,
+        SELECT workouts.name AS workout_name, users_workouts.id AS user_workout_id, workouts.id AS workout_id, workouts.name AS name, workouts.description AS description, exercises_in_workouts.sets AS sets, users_workouts.workout_date AS date,
         exercises_in_workouts.reps AS reps, exercises_in_workouts.exercise_order AS exercise_order, exercises.name AS exercise_name
         FROM users_workouts 
         INNER JOIN workouts ON users_workouts.workout_id = workouts.id
@@ -98,17 +98,45 @@ export async function  getExercises(){
 }
 
 export async function addWorkout(date, workout_title, exercises, user_id){
-  const [result] = await pool.query(`INSERT INTO workouts(name) VALUES(?)`, [workout_title]);
-  console.log(result);
-  if (result) {
-    exercises.forEach(async (exercise, index) => {
-      const [result2] = await pool.query(`INSERT INTO exercises_in_workouts(workout_id, exercise_id, sets, reps, exercise_order) VALUES(?, ?, ?, ?, ?)`, [result.insertId, exercise.id, exercise.sets, exercise.reps, index + 1]);
-      console.log(result2);
-    })
-      const [result3] = await pool.query(`INSERT INTO users_workouts(user_id, workout_id, workout_date) VALUES(?, ?, ?)`, [user_id, result.insertId, date]);
-      return result3;
-    }
-    return -1;
-  }
+  const conn = await pool.getConnection();
 
+  try {
+  await conn.beginTransaction();
+
+  const [result] = await conn.query(`INSERT INTO workouts(name) VALUES(?)`, [workout_title]);
+  for(const exercise of exercises) {
+    await conn.query(`INSERT INTO exercises_in_workouts(workout_id, exercise_id, sets, reps, exercise_order) VALUES(?, ?, ?, ?, ?)`, [result.insertId, exercise.id, exercise.sets, exercise.reps, exercise.order]);
+  }
+  const [userWorkout] = await conn.query(`INSERT INTO users_workouts(user_id, workout_id, workout_date) VALUES(?, ?, ?)`, [user_id, result.insertId, date]);
+    
+    await conn.commit();
+    return userWorkout;
+  } catch(err) {
+    await conn.rollback();
+    throw new Error(err);
+  } finally {
+    conn.release();
+  }
+}
+
+export async function setWorkoutChanges(workoutID, workout_title, workout_date, workout_exercises, userID) {
+  const conn = await pool.getConnection();
+
+  try {
+    await conn.beginTransaction();
+    
+    await conn.query('UPDATE users_workout SET workout_date = ?  WHERE user_id = ? AND workout_id = ?', [workout_date, userID, workoutID]);
+    await conn.query('UPDATE workouts SET name = ? WHERE workouts.id = ?', [workout_title, workoutID]);
+    for(exercise of workout_exercises) {
+      await conn.query('UPDATE exercises_in_workouts SET exercise_id = ?, sets = ?, reps = ?, exercise_order = ?', [exercise.id, exercise.sets, exercise.reps])
+    }
+    
+    await conn.commit();
+  } catch(err){
+    await conn.rollback();
+    throw new Error(err);
+  } finally {
+    await conn.release();
+  }
+}
 
