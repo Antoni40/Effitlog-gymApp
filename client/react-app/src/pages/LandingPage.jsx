@@ -6,11 +6,11 @@ function Start(){
   return(
     <div>
       <header>
-          <nav>
+          <nav className={styles.mainNavigation}>
             <div className={styles.logoContainer}>
               <img src="" alt="Logo" />
             </div>
-            <div className="buttons-container">
+            <div className={styles.buttonsContainer}>
               <Link to="/login">
                 Sign-in
               </Link>

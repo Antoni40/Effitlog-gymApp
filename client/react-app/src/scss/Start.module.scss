@@ -3,20 +3,27 @@
 @use './main.scss';
 
 
-nav {
+.mainNavigation {
   display: flex;
   justify-content: space-between;
   background-color: v.$black;
-  height: 8vh;
+  height: 6vh;
   align-items: center;
   font-size: 1.3rem;
   padding: 0 2%;
-
-  a {
-    text-decoration: none;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-family: 'Arial', sans-serif;
+    // a:nth-of-type(2n - 1) {
+    //   margin-right: 10px;
+    // }
+  .buttonsContainer {
+    a {
+      &:nth-of-type(2n) {
+        margin-right: 10px;
+      }
+      margin-right: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      font-family: 'Arial', sans-serif;
+    }
   }
 }
 .mainContent {

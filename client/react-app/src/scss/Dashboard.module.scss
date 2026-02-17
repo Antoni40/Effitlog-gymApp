@@ -2,11 +2,32 @@
 @use './variables.scss' as v;
 @use './main.scss';
 
-.greeting {
+.mainNavigation {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  background-color: v.$black;
+  height: 6vh;
   align-items: center;
-  font-size: 2rem;
+  font-size: 1.3rem;
+  padding: 0 2%;
+    // a:nth-of-type(2n - 1) {
+    //   margin-right: 10px;
+    // }
+  .buttonsContainer {
+    a {
+      &:nth-of-type(2n - 1) {
+        margin-right: 20px;
+      }
+      text-decoration: none;
+      font-weight: bold;
+      font-family: 'Arial', sans-serif;
+    }
+  }
+}
+
+.greeting {
+  margin-left: 20px;
+  font-size: 1.5rem;
   margin-top: 20px;
 }
 
@@ -20,6 +41,7 @@
     .chartContainer {
       height: 70%;
       width: 70%;
+      margin-top: 20px;
     }
   }
   section {
@@ -29,6 +51,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      button {
+        display: inline-flex;
+        justify-content: space-between;
+      }
     }
   }
 
@@ -40,15 +66,15 @@
     overflow: auto;
     height: 50vh;
     .subtitle {
-      color: rgb(133, 133, 133);
+      color: v.$white-color;
       
     }
     ul {
       list-style-type: none;
       li {
         display: block;
-        background-color: white;
-        color: black;
+        background-color: v.$medium-grey;
+        color: white;
         font-size: 1.1rem;
         margin: 10px 5px;
         border-radius: 5px;
@@ -59,10 +85,34 @@
   }
   
   .manipulationContainer, .progressContainer, .closestWorkouts {
-    background-color: v.$light-grey;
+    background-color: v.$grey;
     margin: 20px;
     border-radius: 10px;
     padding: 20px;
+    border: 1px solid v.$light-grey;
+    h2 {
+      margin-bottom: 20px;
+    }
+  }
+  .manipulationContainer {
+    a {
+        background-color: v.$light-blue;
+        width: 50%;
+        text-align: left;
+        padding-left: 15px;
+        text-decoration: none;
+        padding: 5px;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    a:hover {
+      background-color: v.$white-color;
+      color: black;
+    }
   }
   .progressContainer {
     display: flex;

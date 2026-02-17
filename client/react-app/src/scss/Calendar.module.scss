@@ -1,0 +1,46 @@
+@use './mixins.scss' as m;
+@use './variables.scss' as v;
+@use './main.scss';
+
+
+.calendarContainer {
+  max-width: 35%;
+  margin: 0 auto;
+  margin-top: 2vh;
+  .workoutsGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    list-style-type: none;
+    .calendarPosition:hover {
+      background-color: v.$medium-grey;
+    }
+    .calendarPosition {
+    background-color: v.$grey;
+    margin: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: space-between;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid black;
+    transition: background-color 0.3s;
+    .actionsContainer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      button {
+        margin: 0;
+      }
+      .deleteWorkoutBtn {
+        background-color: rgba(255, 0, 0, 0.1);
+        transition: background-color 0.2s;
+      }
+      .deleteWorkoutBtn:hover {
+        background-color: v.$light-red;
+        color: white;
+      }
+    }
+    }
+  }
+}

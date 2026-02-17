@@ -10,7 +10,9 @@ function EditWorkout(){
     {id: '', sets: '', reps: '', exercise_order: ''}
   ]);
   const [loading, setLoading] = useState([true, true]);
-  const [workoutData, setWorkoutData] = useState({});
+  const [workoutData, setWorkoutData] = useState({
+    workout_title: '', workout_date: '', nextWorkoutID: id, prevWorkoutID: id
+  });
 
   useEffect(() => {
   fetch(`http://localhost:8080/api/getWorkout/${id}`, {
@@ -26,10 +28,13 @@ function EditWorkout(){
     }
   })
   .then((res) => {
-    const exercises = res.result;
+    const exercises = res.result; 
+    let nextWorkoutID = res.nextWorkoutID ? res.nextWorkoutID : id;
+    let prevWorkoutID = res.prevWorkoutID ? res.prevWorkoutID : id;
+    setWorkoutData({workout_title: exercises[0].workout_name, workout_date: exercises[0].date, 
+      nextWorkoutID, prevWorkoutID});
     setWorkoutRows(exercises);
-    setWorkoutData({workout_title: exercises[0].name, workout_date: exercises[0].date})
-    setLoading(loading[0] = false)
+    setLoading((prev) => [false, prev[1]]);
   })
   .catch((err) => {
     alert(err);
@@ -47,7 +52,7 @@ function EditWorkout(){
     .then((res) => {
       console.log(res);
       setAvailableExercises(res.result);
-      setLoading(loading[1] = false)
+      setLoading((prev) => [prev[0], false])
     })
   }, []);
 
@@ -86,9 +91,11 @@ function EditWorkout(){
   if(loading[0] === true && loading[1] === true) return <p>Loading...</p>
 
   return(
-    <div className={styles.pageContainer}>
+    <div className={styles.pageContainer}>  
     <div className={styles.formContainer}>
       <Link to="/dashboard">Go back to dashboard</Link>
+      <Link to={`/workouts/${workoutData.nextWorkoutID}/edit`}>Next workout</Link>
+      <Link to={`/workouts/${workoutData.prevWorkoutID}/edit`}>Previous workout</Link>
       <h1>Edit workout nr. {id}</h1>
     <form onSubmit={(e) => {handleSubmit(e)}}>
         <h2>Workout info</h2>

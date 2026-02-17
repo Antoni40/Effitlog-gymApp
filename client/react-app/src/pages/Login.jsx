@@ -77,12 +77,13 @@ function Login({setLoggedIn}){
     <div className={styles.contentContainer}>
       <div className={styles.signInContainer}>
         <h1>Sign-in</h1>
+        <p>Welcome back! Please enter your details.</p>
         <div className={styles.FormContainer}>
           <form method='POST' 
             onSubmit={(e) => {handleLogin(e)}} 
             className={styles.Form}>
 
-            <label htmlFor="login">E-mail:</label>
+            <label htmlFor="login">E-mail</label>
             <input type="email" 
               id="login" 
               name="login" 
@@ -97,10 +98,12 @@ function Login({setLoggedIn}){
               value={loginData.password} 
               onChange={updateLogin}/>
 
-            <button>Log-in</button>
+            <button>Sign-in</button>
           </form>
         </div>
-        <Link to="/register">Or Sign-up</Link>
+        <p>Don't have an account?<br/>
+          <Link to="/register">Sign-up</Link>
+        </p>
       </div>
     </div>
   )

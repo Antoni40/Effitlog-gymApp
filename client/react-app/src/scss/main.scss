@@ -22,9 +22,17 @@ button:hover {
   cursor: pointer;
 }
 
+input {
+  background-color: v.$dark-grey;
+  outline: 1.5px solid v.$light-grey;
+  border-radius: 8px;
+  color: white;
+  padding-left: 10px;
+}
+
 button {
     font-size: 1.2rem;
-    background-color: v.$very-light-blue;
+    background-color: v.$light-blue;
     color: white;
 }
 
@@ -34,7 +42,7 @@ button:hover {
 }
 
 body{
-  background-color: v.$grey;
+  background-color: v.$dark-grey;
   color: white;
   font-family: 'Arial', sans-serif;
 }

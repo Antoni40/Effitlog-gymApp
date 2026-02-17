@@ -46,24 +46,30 @@ function Register(){
     <div className={styles.contentContainer}>
       <div className={styles.signInContainer}>
         <h1>Sign-up</h1>
+        <p>Create an account to get started.</p>
         <div className={styles.FormContainer}>
           <form method='POST'
             onSubmit={handleSubmit}
             className={styles.Form}>
+            <div className={styles.namesContainer}>
+              <div>
+              <label htmlFor="name">First Name</label>
+              <input type="text" 
+                id="name" 
+                name="first_name"
+                value={registerData.first_name}
+                onChange={handleChange}/>
+              </div>
 
-            <label htmlFor="name">Name</label>
-            <input type="text" 
-              id="name" 
-              name="first_name"
-              value={registerData.first_name}
-              onChange={handleChange}/>
-
-            <label htmlFor="surname">Surname</label>
-            <input type="text" 
-              id="surname" 
-              name="surname"
-              value={registerData.surname}
-              onChange={handleChange}/>
+              <div>
+              <label htmlFor="surname">Last Name</label>
+              <input type="text" 
+                id="surname" 
+                name="surname"
+                value={registerData.surname}
+                onChange={handleChange}/>
+              </div>
+            </div>
 
             <label htmlFor="email">E-mail</label>
             <input 
@@ -84,7 +90,9 @@ function Register(){
               <button>Sign-up</button>
           </form>
         </div>
-        <Link to="/login">Or Sign-in</Link>
+        <p> Already have an account?<br/>
+        <Link to="/login">Sign-in</Link>
+        </p>
       </div>
     </div>
   );

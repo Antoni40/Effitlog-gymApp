@@ -6,19 +6,22 @@ import styles from '../scss/Workouts.module.scss';
 function Workouts(){
   let id = Number(useParams().id);
   const navigate = useNavigate();
-  const [workout, setWorkout] = useState([]);
-  const [checkboxes, setCheckboxes] = useState({
-    exercise1: false,
-    exercise2: false,
-    exercise3: false
-  });
+  const [workoutData, setWorkoutData] = useState({});
+  const [workoutExercises, setWorkoutExercises] = useState([]);
 
-  function handleInputChange(e){
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    const name = e.target.name;
-    setCheckboxes((prev) => {
-      return {...prev, [name]: value};
-    })
+  function updateExercise(e){
+    const id = Number(e.target.id);
+    const value = e.target.type === 'checkbox' ? e.target.checked : Number(e.target.value);
+    let name = e.target.name.split('_')[0];
+    setWorkoutExercises((prevExercises) => 
+      prevExercises.map(exercise => {
+        if(exercise.exercise_order === id) {
+          return {...exercise, [name]: value}
+        } else {
+          return exercise;
+        }
+      }
+      ))
   }
 
 
@@ -36,7 +39,19 @@ function Workouts(){
     }
   })
   .then((res) => {
-    setWorkout(res.result);
+    const exercises = res.result; 
+    let nextWorkoutID = res.nextWorkoutID ? res.nextWorkoutID : id;
+    let prevWorkoutID = res.prevWorkoutID ? res.prevWorkoutID : id;
+    setWorkoutData({workout_title: exercises[0].workout_name, workout_date: exercises[0].date, 
+      nextWorkoutID, prevWorkoutID});
+    setWorkoutExercises(exercises.map(exercise => (
+      {
+        ...exercise, 
+        done: false, 
+        load: ''
+      }
+      ))
+    );
   })
   .catch((err) => {
     alert(err);
@@ -45,32 +60,39 @@ function Workouts(){
 
   useEffect(() => {
   console.log("Workout: ");
-  console.log(workout);
-  }, [workout]);
+  console.log(workoutExercises);
+  }, [workoutExercises]);
+
 
   function handleSubmit(e){
     
     e.preventDefault();
-    
-    for (const [key, value] of Object.entries(checkboxes)) {
-      console.log(`${key}: ${value}`);
-    }
+  
 
-    let isEveryBoxChecked = true;
-    for(const key in checkboxes){
-      if(!checkboxes[key]){
-        isEveryBoxChecked = false;
-      }
-    }
+    let inputsFilled = true;
+    workoutExercises.forEach((exercise => {
+      if(!exercise.done) inputsFilled = false;
+    }))
 
-    if(!isEveryBoxChecked){
+    if(!inputsFilled){
       alert("You didn't do all exercises.");
     } else {
       alert("You did all exercises, congratulation");
 
-      fetch(`http://localhost:8080/api/setWorkoutDone/${id}`, {
-        method: "GET",
-        credentials: 'include'
+      fetch(`http://localhost:8080/api/setWorkoutDone`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json"},
+        credentials: 'include',
+        body: JSON.stringify(
+          workoutExercises.map(exercise => ({
+            userWorkoutID: exercise.user_workout_id,
+            exerciseID: exercise.exercise_id,
+            sets: exercise.sets,
+            reps: exercise.reps,
+            exerciseOrder: exercise.exercise_order,
+            load: exercise.load
+          }))
+        )
       })
         .then(async (res) => {
           if(res.status !== 200){
@@ -90,22 +112,41 @@ function Workouts(){
 
   return(
     <>
-      {/*you need to change that*/}
-      <Link to={`/workouts/${id + 1}`}>Next workout</Link>
-      <Link to={`/workouts/${(id > 1) ? (id - 1) : 1}`}>Previous workout</Link>
-      <Link to={`/workouts/${id}/edit`}>Edit workout</Link>
-      <Link to={`/dashboard`}>Go back to dashboard</Link>
+      <nav className={styles.workoutNav}>
+        <Link to={`/workouts/${workoutData.nextWorkoutID}`}>Next workout</Link>
+        <Link to={`/workouts/${workoutData.prevWorkoutID}`}>Previous workout</Link>
+        <Link to={`/workouts/${id}/edit`}>Edit workout</Link>
+        <Link to={`/dashboard`}>Go back to dashboard</Link>
+      </nav>
       <div className={styles.workoutListContainer}>
         <h1>Workout</h1>
         <ul>
-          {/*How to check if all fields are checked*/}
           <form onSubmit={(e) => {handleSubmit(e)}}>
-          {(workout) ? workout.map((exercise, index) => {
-            return <li key={index}>
-              {exercise.exercise_order}. {exercise.exercise_name}: <span>{exercise.reps} reps x </span><span>{exercise.sets} sets</span> 
-              <input type="checkbox" name={`exercise${exercise.exercise_order}`} onChange={(e) => {handleInputChange(e)}} onLoad={(e) => {handleInputChange(e)}} value={false}/>
+          {(workoutExercises) ? workoutExercises.map((exercise, index) => {
+            return (
+              <li key={index} className={styles.exerciseContainer}>
+
+              <div className={styles.exerciseInfo}>
+              {exercise.exercise_order}. {exercise.exercise_name}: <span>{exercise.reps} reps x </span><span>{exercise.sets} sets</span>
+              </div> 
+              
+              <div className={styles.exerciseActions}>
+              <label htmlFor="load"></label>
+              <input type="number" placeholder=""
+              name={`load_${exercise.exercise_order}`}
+              id={`${exercise.exercise_order}`}
+              onChange={(e) => updateExercise(e)}
+              />kg
+
+              {/* Add custom checkbox */}
+              <label className={styles.container}>
+                <input type="checkbox" name={`done_${exercise.exercise_order}`} onChange={(e) => {updateExercise(e)}}
+                id={`${exercise.exercise_order}`}/>
+                <span className={styles.checkMark}></span>
+              </label>
+              </div>
             </li>
-          }) : ""}
+          )}) : ""}
             <button>I done this</button>
           </form>
         </ul>

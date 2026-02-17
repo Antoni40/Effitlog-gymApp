@@ -22,15 +22,15 @@ ChartJS.register(
 );
 
 function BarChart(props) {
-    console.log(props.data)
-    console.log(props.labels);
+  console.log(props.data)
+  console.log(props.labels);
   const data = {
     labels: props.labels,
     datasets: [
       {
-        label: "workouts in weeks",
+        label: "total used weight", 
         data: props.data,
-        backgroundColor: "rgb(121, 121, 121)"
+        backgroundColor: " rgb(120, 170, 230)"
       }
     ]
   };
@@ -38,15 +38,36 @@ function BarChart(props) {
 
   const options = {
     responsive: true,
+    scales: {
+      y: {
+        ticks: {
+          color: '#bccce2'
+        },
+        grid: {
+          color: '#ffffff1a'
+        }
+      },
+      x: {
+        ticks: {
+          color: '#bccce2'
+        }
+      }
+    },
     plugins: {
+      legend: {
+        labels: {
+          color: '#cbd5e1'
+        },
+      },
       title: {
         display: true,
-        text: "Gym progress"
+        text: "Gym progress",
+        color: '#ffffff'
+      },
       }
-    }
   };
 
-  return <Bar data={data} options={options} />;
+  return <Bar key={JSON.stringify(props.data)} data={data} options={options} />;
 }
 
 export default BarChart;

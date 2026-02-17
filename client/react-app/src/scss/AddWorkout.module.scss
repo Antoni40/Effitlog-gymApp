@@ -11,8 +11,7 @@
     margin-bottom: 10px;
   }
   .formContainer{
-    width: 30%;
-    background-color: v.$light-grey;
+    background-color: v.$grey;
     padding: 40px;
     border-radius: 20px;
     form {
@@ -53,6 +52,36 @@
       button {
         background-color: v.$light-blue;
       }
+    }
+  }
+}
+
+
+@media screen and (min-width: 480px) {
+  .pageContainer {
+    .formContainer {
+      width: 80%;
+    }
+  }
+}
+@media screen and (min-width: 768px) {
+  .pageContainer {
+    .formContainer {
+      width: 70%;
+    }
+  }
+}
+@media screen and (min-width: 992px) {
+  .pageContainer {
+    .formContainer {
+      width: 50%;
+    }
+  }
+}
+@media screen and (min-width: 1280px) {
+  .pageContainer {
+    .formContainer {
+      width: 30%;
     }
   }
 }

@@ -11,7 +11,8 @@ import Workouts from './pages/Workouts.jsx'
 import About from './pages/About.jsx';
 import EditWorkout from './pages/EditWorkout.jsx';
 import AddWorkout from './pages/AddWorkout.jsx';
-import DeleteWorkout from './pages/DeleteWorkout.jsx'
+import Calendar from './pages/Calendar.jsx'
+import Settings from './pages/Settings.jsx'
 import './scss/main.scss'
 
 const router = createBrowserRouter([
@@ -24,7 +25,8 @@ const router = createBrowserRouter([
   {path: "/workouts/add", element: <AddWorkout/>},
   {path: "/workouts/:id", element: <Workouts/>},
   {path: "/workouts/:id/edit", element: <EditWorkout/>},
-  {path: "/workout/delete", element: <DeleteWorkout/>},
+  {path: "workouts/calendar", element: <Calendar/>},
+  {path: "/settings", element: <Settings />},
   {path: "*", element: <NotFoundPage />},
 ])
 

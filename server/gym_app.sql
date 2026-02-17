@@ -69,17 +69,6 @@ CREATE TABLE `exercises_in_workouts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `exercises_in_workouts`
---
-
-INSERT INTO `exercises_in_workouts` (`id`, `workout_id`, `exercise_id`, `sets`, `reps`, `exercise_order`) VALUES
-(1, 1, 1, 3, 8, 1),
-(2, 1, 2, 3, 8, 2),
-(3, 1, 3, 3, 8, 3);
-
--- --------------------------------------------------------
-
---
 -- Struktura tabeli dla tabeli `users`
 --
 
@@ -90,17 +79,6 @@ CREATE TABLE `users` (
   `email` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `name`, `surname`, `email`, `password`) VALUES
-(2, 'jan', 'kowalski', 'jan@kowalski.pl', '$2b$10$IsqSibQmr4DUInNuyWpFQ.M0rVZPcpf1xC4F1Qse091VRe.x9aXam'),
-(3, 'Natalia', 'Lubomska', 'natalialubomska@gmail.com', '$2b$10$Ji6fLVJzXnSVmPb1YbHuv.NMRIfECaOklumQETMiUaR2RmZgg4HXu'),
-(4, 'Damian', 'Skrzypek', 'skrzypek@op.pl', '$2b$10$YcMFj5xCdF5pjcxg6Fp7juQj2JCUDUvVTRNyPm7fnPOOaCDJ.oimC');
-
--- --------------------------------------------------------
 
 --
 -- Struktura tabeli dla tabeli `users_workouts`
@@ -114,19 +92,6 @@ CREATE TABLE `users_workouts` (
   `workout_comment` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `users_workouts`
---
-
-INSERT INTO `users_workouts` (`id`, `user_id`, `workout_id`, `workout_date`, `workout_comment`) VALUES
-(1, 3, 1, '2026-01-20', 'hard workout'),
-(2, 3, 1, '2026-01-25', 'hard workout');
-
--- --------------------------------------------------------
-
---
--- Struktura tabeli dla tabeli `workouts`
---
 
 CREATE TABLE `workouts` (
   `id` int(11) NOT NULL,
@@ -135,20 +100,6 @@ CREATE TABLE `workouts` (
   `description` text DEFAULT NULL,
   `difficulty` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `workouts`
---
-
-INSERT INTO `workouts` (`id`, `author_id`, `name`, `description`, `difficulty`) VALUES
-(1, 3, 'Strength workout', 'some description', 3),
-(2, 3, 'Strength workout', 'some description', 4);
-
--- --------------------------------------------------------
-
---
--- Struktura tabeli dla tabeli `workouts_results`
---
 
 CREATE TABLE `workouts_results` (
   `id` int(11) NOT NULL,
