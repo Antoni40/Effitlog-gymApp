@@ -1,8 +1,11 @@
+import { Link } from 'react-router-dom'
 
 function Settings(){
     return (
-        <h1>Settings</h1>
-        
+        <div>
+            <h1>Settings</h1>
+            <Link to="/dashboard">Go back to dashboard</Link>
+        </div>  
     )
 }
 

@@ -36,7 +36,7 @@ function cookieJwtAuth(req, res, next){
     //the expires time is for testing purposes
     const newToken = jwt.sign({id: user.id, name: user.name, 
       surname: user.surname, email: user.email}, process.env.JWT_SECRET, {
-        expiresIn: '1h'
+        expiresIn: process.env.JWT_EXPIRE_TIME
       });
       
     //the expires time is for testing purposes
@@ -81,7 +81,7 @@ app.post('/api/checkUserData', async (req, res) => {
 
   const userData = {id: result.id, name: result.name, email: result.email};
   //the expires time is for testing purposes
-  const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '1h' })
+  const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE_TIME })
 
   res.cookie('token', token, {
     maxAge: 1000 * 60 * 15,

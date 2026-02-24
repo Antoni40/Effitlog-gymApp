@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import styles from '../scss/AddWorkout.module.scss';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 function AddWorkout(){
-
+  const navigate = useNavigate();
   const [availableExercises, setAvailableExercises] = useState([]);
   const [workoutRows, setWorkoutRows] = useState([
     {id: '', sets: '', reps: ''}
@@ -22,7 +22,8 @@ function AddWorkout(){
       setLoading(false);
     }) 
     .catch((err) => {
-      console.error("Data fetch error" + err)
+      console.error("Data fetch error" + err);
+      navigate('/login');
     })
   }, []);
 
@@ -54,6 +55,10 @@ function AddWorkout(){
         workoutData, 
         workoutRows
       })
+    }).then((res) => {
+      if(res.ok) {
+        navigate('/dashboard');
+      }
     })
   }
 

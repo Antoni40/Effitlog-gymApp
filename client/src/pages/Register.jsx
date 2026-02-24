@@ -3,14 +3,13 @@ import { useState } from 'react';
 import styles from '../scss/Forms.module.scss'
 
 function Register(){
+  const navigate = useNavigate();
   const [registerData, setRegisterData] = useState({
     first_name: "",
     surname: "",
     email: "",
     password: ""
   });
-
-  const navigate = useNavigate();
 
   function handleChange(e){
     const { name, value } = e.target;
@@ -39,6 +38,10 @@ function Register(){
         } else {
           alert('register error');
         }
+       })
+       .catch((err) => {
+        console.log(err);
+        navigate('/login');
        })
   }
 

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import styles from '../scss/Calendar.module.scss';
+
 function Calendar(){
+    const navigate = useNavigate();
     const [workouts, setWorkouts] = useState([]);
     const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
@@ -21,7 +24,8 @@ function Calendar(){
             setWorkouts(res.workouts);
         })
         .catch((err) => {
-            console.log("Some problem: " + err)
+            console.log("Some problem: " + err);
+            navigate('/login');
         })
     }
     function deleteWorkout(id){
@@ -43,6 +47,7 @@ function Calendar(){
  
     return(
         <div className={styles.calendarContainer}> 
+            <Link to="/dashboard">Go back to dashboard</Link>
             <h1>Workouts Calendar</h1>
             <ul className={styles.workoutsGrid}>
                 {(workouts.length !== 0) ?

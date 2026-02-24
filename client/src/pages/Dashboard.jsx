@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import styles from '../scss/Dashboard.module.scss';
 import { useNavigate, Link } from 'react-router-dom';
 import BarChart from './BarChart.jsx';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus, faPencil, faTrash, faCalendar, faGear } from '@fortawesome/free-solid-svg-icons'
+
 
 function Dashboard(){
   const navigate = useNavigate();
@@ -11,13 +14,8 @@ function Dashboard(){
   const [workouts, setWorkouts] = useState([]);
   const [workoutsResults, setWorkoutsResults] = useState([]);
 
-  const labels = workoutsResults.map((el) => 
-    el.user_workout_id
-  );
-
-  const total_weights = workoutsResults.map((el) =>
-    el.total_weight
-  )
+  const labels = workoutsResults.map((el) => el.workout_date);
+  const total_weights = workoutsResults.map((el) => el.workout_weight);
 
   const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
  
@@ -43,6 +41,7 @@ function Dashboard(){
       })
       .catch((err) => {
         console.log("Some problem: " + err);
+        navigate('/login');
       })
   }, []);
 
@@ -55,29 +54,29 @@ function Dashboard(){
       return res.json();
     })
     .then((res) => {
-      console.log(res);
+
       const workouts_results = res.result;
-
       let usedWeightInTrainings = {};
+
       workouts_results.forEach((element) => {
-        const weight = Number(element.used_weight);
         const id = element.user_workout_id;
+        const weight = Number(element.used_weight * element.sets * element.reps);
+        const date = new Date(element.workout_date).toLocaleDateString();
+        console.log(date);
 
-        //protection for += operator
         if(!usedWeightInTrainings[id]){
-          usedWeightInTrainings[id] = 0;
+          usedWeightInTrainings[id] = {
+            workout_weight: 0,
+            workout_date: date
+          }
         }
+      
+        usedWeightInTrainings[id].workout_weight += weight;
 
-        usedWeightInTrainings[id] += weight;
+        console.log(usedWeightInTrainings); 
       })
-      //test
-      setWorkoutsResults(() => {
-        const array = [];
-        for(const [id, weight] of Object.entries(usedWeightInTrainings)){
-          array.push({user_workout_id: Number(id), total_weight: weight});
-        }
-        return array;
-      });
+      const array = Object.values(usedWeightInTrainings)
+      setWorkoutsResults(array);
     })
   }, []);
 
@@ -164,19 +163,19 @@ function Dashboard(){
               <div className={styles.changesButtons}>
                 {/*add more options*/}
                 <Link to={`/workouts/${tempUpdateURL}/edit`}>
-                  Modify Workouts <span>📝</span>  
+                  Modify Workouts <span><FontAwesomeIcon icon={faPencil} /></span>  
                   </Link>
                 <Link to={`/workouts/add`}>
-                  Add new Workout <span>➕</span>
+                  Add new Workout <span><FontAwesomeIcon icon={faPlus} /></span>
                 </Link>
                 <Link to={`/workouts/calendar`}>
-                  Delete workout <span>🗑️</span>
+                  Delete workout <span><FontAwesomeIcon icon={faTrash} /></span>
                 </Link>
                 <Link to={`/workouts/calendar`}>
-                  Full calendar <span>📅</span>
+                  Full calendar <span><FontAwesomeIcon icon={faCalendar} /></span>
                 </Link>
                 <Link to={`/settings`}>
-                  Progression settings <span>⚙️</span>
+                  Progression settings <span><FontAwesomeIcon icon={faGear}/></span>
                 </Link>
               </div>
             </section>

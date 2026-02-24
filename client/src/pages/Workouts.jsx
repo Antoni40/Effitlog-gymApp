@@ -1,6 +1,7 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
+import { iconsLowerBody, iconsUpperBody} from "../assets/icons.js"
 import styles from '../scss/Workouts.module.scss';
 
 function Workouts(){
@@ -54,7 +55,8 @@ function Workouts(){
     );
   })
   .catch((err) => {
-    alert(err);
+    console.log(err);
+    navigate('/login');
   })
   }, [id]);
 
@@ -125,29 +127,41 @@ function Workouts(){
           {(workoutExercises) ? workoutExercises.map((exercise, index) => {
             return (
               <li key={index} className={styles.exerciseContainer}>
+              {Object.entries(iconsUpperBody).map(([key, value]) => {
+                if(exercise.exercise_muscle_group === key){
+                  return <img src={value} alt={key} />
+                }
+              })}
+              {Object.entries(iconsLowerBody).map(([key, value]) => {
+                if(exercise.exercise_muscle_group === key){
+                  return <img src={value} alt={key} />
+                }
+              })}
 
+              <div className={styles.textCheckboxContainer}>
+              <div>
               <div className={styles.exerciseInfo}>
-              {exercise.exercise_order}. {exercise.exercise_name}: <span>{exercise.reps} reps x </span><span>{exercise.sets} sets</span>
+                <span className={styles.textLine}>{exercise.exercise_order}. {exercise.exercise_name}</span> 
+                <span>{exercise.reps} reps x </span><span>{exercise.sets} sets</span>
               </div> 
               
               <div className={styles.exerciseActions}>
-              <label htmlFor="load"></label>
               <input type="number" placeholder=""
               name={`load_${exercise.exercise_order}`}
               id={`${exercise.exercise_order}`}
               onChange={(e) => updateExercise(e)}
               />kg
+              </div>
+              </div>
 
               {/* Add custom checkbox */}
-              <label className={styles.container}>
-                <input type="checkbox" name={`done_${exercise.exercise_order}`} onChange={(e) => {updateExercise(e)}}
-                id={`${exercise.exercise_order}`}/>
-                <span className={styles.checkMark}></span>
-              </label>
+              
+              <input type="checkbox" name={`done_${exercise.exercise_order}`} onChange={(e) => {updateExercise(e)}}
+              id={`${exercise.exercise_order}`}/>
               </div>
             </li>
           )}) : ""}
-            <button>I done this</button>
+            <button>Finish</button>
           </form>
         </ul>
       </div>

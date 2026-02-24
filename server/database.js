@@ -96,7 +96,7 @@ export async function getWorkout(userWorkoutID, userID){
   try {
     const [result] = await conn.query(`
           SELECT exercises.id AS exercise_id ,workouts.name AS workout_name, users_workouts.id AS user_workout_id, workouts.id AS workout_id, workouts.description AS description, exercises_in_workouts.sets AS sets, users_workouts.workout_date AS date,
-          exercises_in_workouts.reps AS reps, exercises_in_workouts.exercise_order AS exercise_order, exercises.name AS exercise_name
+          exercises_in_workouts.reps AS reps, exercises_in_workouts.exercise_order AS exercise_order, exercises.name AS exercise_name, exercises.muscle_group AS exercise_muscle_group
           FROM users_workouts 
           INNER JOIN workouts ON users_workouts.workout_id = workouts.id
           INNER JOIN exercises_in_workouts ON workouts.id = exercises_in_workouts.workout_id
@@ -245,8 +245,9 @@ export async function getWorkoutsResults(userID){
   const conn = await pool.getConnection();
   try{
     //maybe I should use aliases
-    const [results] = await conn.query(`SELECT workouts_results.id AS workout_results_id, workouts_results.user_workout_id, workouts_results.exercise_id, 
-      workouts_results.sets, workouts_results.reps, workouts_results.used_weight 
+    const [results] = await conn.query(`SELECT workouts_results.id AS workout_results_id, workouts_results.user_workout_id,
+      workouts_results.exercise_id, 
+      workouts_results.sets, workouts_results.reps, workouts_results.used_weight, users_workouts.workout_date
       FROM workouts_results
       INNER JOIN users_workouts ON users_workouts.id = workouts_results.user_workout_id
       WHERE users_workouts.user_id = ?

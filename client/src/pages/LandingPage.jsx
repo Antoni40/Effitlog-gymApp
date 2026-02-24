@@ -1,4 +1,4 @@
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from '../scss/Start.module.scss'
 import image from '../assets/cbum-31-07-2024-0001_480x480.webp'
 
@@ -11,6 +11,9 @@ function Start(){
               <img src="" alt="Logo" />
             </div>
             <div className={styles.buttonsContainer}>
+              <Link to="/exercises">
+                Exercises
+              </Link>
               <Link to="/login">
                 Sign-in
               </Link>

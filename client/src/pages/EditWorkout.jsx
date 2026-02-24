@@ -37,7 +37,8 @@ function EditWorkout(){
     setLoading((prev) => [false, prev[1]]);
   })
   .catch((err) => {
-    alert(err);
+    console.log(err);
+    navigate('/login');
   })
   }, [id]);
    

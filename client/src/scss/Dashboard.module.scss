@@ -35,11 +35,12 @@
   margin-top: 20px;
   display: grid;
   grid-template-columns: auto auto auto;
-  grid-template-rows: 60vh;
+  grid-template-rows: 70vh;
+  height: 80vh;
 
   .progressContainer {
     .chartContainer {
-      height: 70%;
+      height: 80%;
       width: 70%;
       margin-top: 20px;
     }
@@ -64,10 +65,8 @@
 
   .calendarContainer {
     overflow: auto;
-    height: 50vh;
     .subtitle {
       color: v.$white-color;
-      
     }
     ul {
       list-style-type: none;
@@ -90,6 +89,7 @@
     border-radius: 10px;
     padding: 20px;
     border: 1px solid v.$light-grey;
+    height: 100%;
     h2 {
       margin-bottom: 20px;
     }

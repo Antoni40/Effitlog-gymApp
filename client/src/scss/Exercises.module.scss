@@ -1,0 +1,28 @@
+@use './mixins.scss' as m;
+@use './variables' as v;
+@use './main.scss';
+
+h1 {
+  margin: 1%;
+}
+.bodyDivideTitle {
+    display: block;
+    margin-top: 2%;
+    margin-left: 1%;
+}
+.muscleGroupContainer {
+  margin-top: 2%;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  row-gap: 20px;
+  overflow-y: auto;
+  .muscleGroup {
+    text-align: center;
+    p {
+      text-transform: capitalize;
+    }
+    img {
+      height: 8rem;
+    }
+  }
+}
