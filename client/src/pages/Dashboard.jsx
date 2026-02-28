@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faPencil, faTrash, faCalendar, faGear } from '@fortawesome/free-solid-svg-icons'
 import Navbar from '../components/NavigationBar.jsx';
 import '../scss/main.scss';
+import fetchDataGET from '../utils/fetchDataGET.js';
 
 function Dashboard(){
   const navigate = useNavigate();
@@ -16,51 +17,38 @@ function Dashboard(){
 
   const labels = workoutsResults.map((el) => el.workout_date);
   const total_weights = workoutsResults.map((el) => el.workout_weight);
-
   const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
  
   useEffect(() => {
-    fetch('http://localhost:8080/api/getName', {
-      method: "GET",
-      credentials: 'include'
-    })
-      .then((res) => {
-        if(res.ok){
-          return res.json();
-        } else {
-          isUserLoggedIn();
-          throw new Error("you can't get your data");
+    fetchDataGET('http://localhost:8080/api/getName')
+      .then((res_data) => {
+        if(!res_data.success) {
+          throw new Error("Internal server error");
         }
-      })
-      .then((res) => {
-        const {userName} = res;
-        console.log(userName)
+        const {userName} = res_data;
         setName(userName);
       })
       .catch((err) => {
-        console.log("Some problem: " + err);
-        navigate('/login');
+        console.error(err);
+        if(err.message === "unauthorized") {
+          navigate('/login');
+        }
       })
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/getWorkoutsResults', {
-      method: 'GET',
-      credentials: 'include'
-    })
-    .then((res) => {
-      return res.json();
-    })
-    .then((res) => {
-
-      const workouts_results = res.result;
+    fetchDataGET('http://localhost:8080/api/getWorkoutsResults')
+    .then((res_data) => {
+      if(!res_data.success) {
+          throw new Error("Internal server error");
+      }
+      const workouts_results = res_data.result;
       let usedWeightInTrainings = {};
 
       workouts_results.forEach((element) => {
         const id = element.user_workout_id;
         const weight = Number(element.used_weight * element.sets * element.reps);
         const date = new Date(element.workout_date).toLocaleDateString();
-        console.log(date);
 
         if(!usedWeightInTrainings[id]){
           usedWeightInTrainings[id] = {
@@ -70,53 +58,36 @@ function Dashboard(){
         }
       
         usedWeightInTrainings[id].workout_weight += weight;
-
-        console.log(usedWeightInTrainings); 
+ 
       })
       const array = Object.values(usedWeightInTrainings)
       setWorkoutsResults(array);
     })
+    .catch((err) => {
+      console.error(err);
+      if(err.message === "uauthorized") {
+        navigate('/login');
+      }
+    })
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/calendar/getWorkouts', {
-      method: 'GET',
-      credentials: 'include'
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((res) => {
-        setWorkouts(res.workouts);
-        setTempUpdateURL(res.workouts[0].user_workout_id);
+    fetchDataGET('http://localhost:8080/api/calendar/getWorkouts')
+      .then((res_data) => {
+        if(!res_data.success) {
+          throw new Error("Internal server error");
+        }
+
+        setWorkouts(res_data.workouts);
+        setTempUpdateURL(res_data.workouts[0].user_workout_id);
       })
       .catch((err) => {
-        console.log("Some problem: " + err)
-      })
-  }, [])
-
-  function isUserLoggedIn() {
-    fetch('http://localhost:8080/api/isUserLoggedIn', {
-      method: 'GET',
-      credentials: 'include'
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((res) => {
-        const {success} = res;
-        if(success){
-          alert("You are logged in");
-        } else {
-          // alert("You are not logged in, your session expired");
-          // navigate('/login');
+        console.error(err)
+        if(err.message === "unauthorized") {
+          navigate('/login');
         }
       })
-      .catch((err) => {
-        console.log("Some problem: " + err)
-      })
-
-  }
+  }, [])
 
   function logOut() {
     fetch('http://localhost:8080/api/logout', {
@@ -124,24 +95,25 @@ function Dashboard(){
       credentials: 'include'
     })
       .then((res) => {
+        if(!res.ok){
+          throw new Error("HTTP error: " + res.status);
+        } 
         return res.json();
       })
-      .then((res) => {
-        const success = res;
-        if(success){
-          navigate('/');
-        } else {
-          console.log("You didn't logged out")
+      .then((res_data) => {
+        if(!res_data.success) {
+          throw new Error("Internal server error");
         }
+        navigate('/');
       })
       .catch((err) => {
-        console.log("Some problem: " + err)
+        console.error(err);
       })
   }
 
   return(
       <div>
-            <Navbar links={[{name, onClick: isUserLoggedIn},
+            <Navbar links={[{name, onClick: () => {navigate('/dashboard')}},
               {name: 'Log-out', onClick: logOut}
             ]}/>
 
@@ -155,7 +127,7 @@ function Dashboard(){
               <section className={styles.manipulationContainer}>
                 <h2>Managing options</h2>            
                 <div className={styles.changesButtons}>
-                  {/*add more options*/}
+
                   <Link to={`/workouts/${tempUpdateURL}/edit`}>
                     Modify Workouts <span><FontAwesomeIcon icon={faPencil} /></span>  
                     </Link>
@@ -171,13 +143,14 @@ function Dashboard(){
                   <Link to={`/settings`}>
                     Progression settings <span><FontAwesomeIcon icon={faGear}/></span>
                   </Link>
+
                 </div>
               </section>
 
               <section className={styles.progressContainer}>
                 <h2>Progress</h2>
                   <div className={styles.chartContainer}>
-                  <BarChart data={total_weights} labels={labels}/>
+                    <BarChart data={total_weights} labels={labels} data_title={"Total used weight in workouts"} title={"Progress over time"}/>
                   </div>
               </section>
 
@@ -187,16 +160,18 @@ function Dashboard(){
                   <p className={styles.subtitle}>Upcoming workouts</p>
                   <div>
                     <ul>
-                      { (workouts.length !== 0) ?
+                      {(workouts.length !== 0) ?
                       workouts.map((workout, index) => {
                         return <li key={index}>
                                   <div>
                                     <h3>{index + 1}. {workout.workout_name}</h3>
-                                    <p className={styles.subtitle}>{`${new Date(workout.workout_date).getDate()}  ${month[new Date(workout.workout_date).getMonth()]}
-                                        ${new Date(workout.workout_date).getFullYear()}`}
+                                    <p className={styles.subtitle}>
+                                      {`${new Date(workout.workout_date).toLocaleDateString()}`}
                                     </p>
                                   </div>
-                                  <div><Link to={`/workouts/${workout.user_workout_id}`}><button>Start workout</button></Link></div>
+                                  <div>
+                                    <button onClick={() => {navigate(`/workouts/${workout.user_workout_id}`)}}>Start workout</button>
+                                  </div>
                                 </li>
                       }) : <p>No workouts available add new workout</p>}
                     </ul>

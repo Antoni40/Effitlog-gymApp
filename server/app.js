@@ -70,13 +70,13 @@ app.post('/api/checkUserData', async (req, res) => {
   if(!result){  
     //401 - not valid authentication
     //is it worth to use return there
-    return res.status(401).json({success: false, error: "Invalid login data"});
+    return res.status(401).json({success: false, message: "Invalid login data"});
   }
 
   const passwordMatch = await bcrypt.compare(password, result.password);
 
   if (!passwordMatch){
-    return res.status(401).json({success: false, error: "wrong password" });
+    return res.status(401).json({success: false, message: "wrong password" });
   } 
 
   const userData = {id: result.id, name: result.name, email: result.email};
@@ -94,7 +94,7 @@ app.post('/api/checkUserData', async (req, res) => {
   
 app.get('/api/getUsers', async (req, res) => {
     const result = await getUsers();
-    res.status(200).json(result);
+    res.status(200).json({result, success: true});
 });
 
 app.post('/api/registerUser', async (req, res) => {
@@ -127,7 +127,7 @@ app.get('/api/logout', (req, res) => {
 
 app.get('/api/getName', cookieJwtAuth, (req, res) => {
 
-  res.status(200).json({userName: req.user.name});
+  res.status(200).json({userName: req.user.name, success: true});
 
 })
 
@@ -187,7 +187,7 @@ app.post('/api/setWorkoutChanges/:id', cookieJwtAuth, async(req, res) => {
   res.status(200).json({success: true, result: result});
 })
 
-app.get('/api/deleteWorkout/:id', cookieJwtAuth, async (req, res) => {
+app.delete('/api/deleteWorkout/:id', cookieJwtAuth, async (req, res) => {
   const user_workout_id  = req.params.id;
   console.log("workout id: " + user_workout_id);
   const result = await deleteWorkout(user_workout_id);
@@ -197,7 +197,7 @@ app.get('/api/deleteWorkout/:id', cookieJwtAuth, async (req, res) => {
 app.get('/api/getWorkoutsResults', cookieJwtAuth, async (req, res) => {
   const userID = req.user.id;
   const result = await getWorkoutsResults(userID);
-  res.status(200).json({succes: true, result});
+  res.status(200).json({success: true, result});
 })
 
 app.listen(8080, () => {

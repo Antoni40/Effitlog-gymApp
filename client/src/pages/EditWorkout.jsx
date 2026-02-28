@@ -1,8 +1,9 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import styles from '../scss/AddWorkout.module.scss';
+import styles from '../scss/ExerciseForm.module.scss';
 import Navbar from "../components/NavigationBar";
 import '../scss/main.scss';
+import fetchDataGET from "../utils/fetchDataGET";
 
 function EditWorkout(){
   let id = Number(useParams().id);
@@ -17,16 +18,7 @@ function EditWorkout(){
   });
 
   useEffect(() => {
-  fetch(`http://localhost:8080/api/getWorkout/${id}`, {
-      method: "GET",
-      credentials: 'include'
-  })
-    .then((res) => {
-      if(!res.ok) {
-          throw new Error("HTTP error" + res.status);
-        }
-        return res.json();
-      })
+    fetchDataGET(`http://localhost:8080/api/getWorkout/${id}`)
     .then((res_data) => {
       if(!res_data.success){
         throw new Error("Internal server error");
@@ -46,20 +38,14 @@ function EditWorkout(){
     })
     .catch((err) => {
       console.error(err);
+      if(err.message === "unauthorized") {
+        navigate('/login');
+      }
     })
   }, [id]);
    
   useEffect(() => {
-    fetch('http://localhost:8080/api/getExercises', {
-      method: "GET",
-      credentials: 'include'
-    })
-    .then((res) => {
-      if(!res.ok){
-        throw new Error("HTTP error" + res.status);
-      }
-      return res.json();
-    })
+    fetchDataGET('http://localhost:8080/api/getExercises')
     .then((res_data) => {
       if(!res_data.success) {
           throw new Error("Internal server error");
@@ -69,6 +55,9 @@ function EditWorkout(){
     })
     .catch((err) => {
       console.error(err);
+      if(err.message === "unauthorized") {
+        navigate('/login');
+      }
     })
   }, []);
 
@@ -101,6 +90,10 @@ function EditWorkout(){
       })
     })
       .then((res) => {
+        if(res.status === 401){
+          alert("Session expired, please log in again");
+          throw new Error("unauthorized");
+        }
         if(!res.ok) {
           throw new Error("HTTP error" + res.status);
         }
@@ -115,7 +108,10 @@ function EditWorkout(){
       })
       .catch((err) => {
         console.error(err);
-        alert(err.message)
+        alert(err.message);
+        if(err.message === "unauthorized") {
+          navigate('/login');
+        }
       })
   }
 

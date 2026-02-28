@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import styles from '../scss/Forms.module.scss'
+import styles from '../scss/AuthForm.module.scss';
 import { useEffect } from 'react';
 import '../scss/main.scss';
 

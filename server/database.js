@@ -186,7 +186,7 @@ export async function addWorkout(date, workout_title, exercises, user_id){
   let exercise_order = 1;
   for(const exercise of exercises) {
     await conn.query(`INSERT INTO exercises_in_workouts(workout_id, exercise_id, sets, reps, exercise_order) VALUES(?, ?, ?, ?, ?)`, 
-      [result.insertId, exercise.id, exercise.sets, exercise.reps, exercise_order]);
+      [result.insertId, exercise.exercise_id, exercise.sets, exercise.reps, exercise_order]);
       exercise_order++;
   }
   const [userWorkout] = await conn.query(`INSERT INTO users_workouts(user_id, workout_id, workout_date) VALUES(?, ?, ?)`, [user_id, result.insertId, date]);

@@ -20,13 +20,11 @@ ChartJS.register(
 );
 
 function BarChart(props) {
-  console.log(props.data)
-  console.log(props.labels);
   const data = {
     labels: props.labels,
     datasets: [
       {
-        label: "total used weight", 
+        label: props.data_title, 
         data: props.data,
         backgroundColor: " rgb(120, 170, 230)"
       }
@@ -59,7 +57,7 @@ function BarChart(props) {
       },
       title: {
         display: true,
-        text: "Gym progress",
+        text: props.title,
         color: '#ffffff'
       },
       }

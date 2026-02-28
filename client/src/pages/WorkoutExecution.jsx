@@ -4,6 +4,7 @@ import { iconsLowerBody, iconsUpperBody} from "../assets/icons.js"
 import styles from '../scss/WorkoutExecution.module.scss';
 import Navbar from "../components/NavigationBar.jsx";
 import '../scss/main.scss';
+import fetchDataGET from "../utils/fetchDataGET.js";
 
 function WorkoutExecution(){
 
@@ -29,16 +30,7 @@ function WorkoutExecution(){
   }
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/getWorkout/${id}`, {
-        method: "GET",
-        credentials: 'include'
-    })
-      .then((res) => {
-        if(!res.ok){
-          throw new Error("HTTP error" + res.status);
-        } 
-        return res.json();
-      })
+    fetchDataGET(`http://localhost:8080/api/getWorkout/${id}`)
       .then((res_data) => {
         if(!res_data.success){
           throw new Error("Internal server error")
@@ -61,7 +53,9 @@ function WorkoutExecution(){
       })
       .catch((err) => {
         console.error(err);
-        navigate('/login');
+        if(err.message === "unauthorized") {
+          navigate('/login');
+        }
       })
   }, [id]);
 
@@ -95,6 +89,10 @@ function WorkoutExecution(){
         )
       })
         .then((res) => {
+          if(res.status === 401){
+            alert("Session expired, please log in again");
+            throw new Error("unauthorized");
+          }
           if(!res.ok){
             throw new Error("HTTP error" + res.status)
           }
@@ -109,6 +107,9 @@ function WorkoutExecution(){
         .catch((err) => {
           console.error(err);
           alert(err.message);
+          if(err.message === "unauthorized") {
+            navigate('/login');
+          }
         })
     }
   }
