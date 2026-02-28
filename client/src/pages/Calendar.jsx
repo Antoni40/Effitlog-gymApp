@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styles from '../scss/Calendar.module.scss';
+import Navbar from "../components/NavigationBar";
+import '../scss/main.scss';
 
 function Calendar(){
     const navigate = useNavigate();
@@ -46,27 +48,32 @@ function Calendar(){
     }
  
     return(
-        <div className={styles.calendarContainer}> 
-            <Link to="/dashboard">Go back to dashboard</Link>
+        <>
+
+        <Navbar links={[{name: "Go back to dashboard", path: "/dashboard"}]}/>
+
+        <div className={styles.calendarContainer}>
             <h1>Workouts Calendar</h1>
             <ul className={styles.workoutsGrid}>
                 {(workouts.length !== 0) ?
-                workouts.map((workout, index) => {
-                    return <li key={index} className={styles.calendarPosition}>
-                                <p>
-                                    {`${workout.workout_name}`} <br/> 
-                                    {`${new Date(workout.workout_date).getDate()}  ${month[new Date(workout.workout_date).getMonth()]}
-                                    ${new Date(workout.workout_date).getFullYear()}`}
-                                </p>
-                                <div className={styles.actionsContainer}>
-                                    <button className={styles.modifyWorkoutBtn}>Modify Workout</button>
-                                    <button onClick={() => {deleteWorkout(workout.user_workout_id)}}
-                                        className={styles.deleteWorkoutBtn}>Delete workout</button>
-                                </div>
-                            </li>
-                }) : <p>No workouts available</p>}
+                    workouts.map((workout, index) => {
+                        return <li key={index} className={styles.calendarPosition}>
+                                    <p>
+                                        {`${workout.workout_name}`} <br/> 
+                                        {`${new Date(workout.workout_date).getDate()}  ${month[new Date(workout.workout_date).getMonth()]}
+                                        ${new Date(workout.workout_date).getFullYear()}`}
+                                    </p>
+                                    <div className={styles.actionsContainer}>
+                                        <button onClick={() => {navigate(`/workouts/${workout.user_workout_id}/edit`)}}
+                                            className={styles.modifyWorkoutBtn}>Modify Workout</button>
+                                        <button onClick={() => {deleteWorkout(workout.user_workout_id)}}
+                                            className={styles.deleteWorkoutBtn}>Delete workout</button>
+                                    </div>
+                                </li>
+                    }) : <p>No workouts available</p>}
             </ul>
         </div>
+        </>
     );
 }
 

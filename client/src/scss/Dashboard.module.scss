@@ -1,127 +1,105 @@
 @use './mixins.scss' as m;
 @use './variables.scss' as v;
-@use './main.scss';
 
-.mainNavigation {
-  display: flex;
-  justify-content: space-between;
-  background-color: v.$black;
-  height: 6vh;
-  align-items: center;
-  font-size: 1.3rem;
-  padding: 0 2%;
-    // a:nth-of-type(2n - 1) {
-    //   margin-right: 10px;
-    // }
-  .buttonsContainer {
-    a {
-      &:nth-of-type(2n - 1) {
-        margin-right: 20px;
-      }
-      text-decoration: none;
-      font-weight: bold;
-      font-family: 'Arial', sans-serif;
-    }
-  }
-}
 
 .greeting {
-  margin-left: 20px;
+  padding-left: 1rem;
   font-size: 1.5rem;
-  margin-top: 20px;
+  padding-top: 1rem;
 }
 
-.mainBlocksContainer {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: auto auto auto;
-  grid-template-rows: 70vh;
-  height: 80vh;
+.pageContentContainer {
+    height: calc(100vh - 4rem);
 
-  .progressContainer {
-    .chartContainer {
-      height: 80%;
-      width: 70%;
-      margin-top: 20px;
+  .mainBlocksContainer {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: 70vh;
+
+    .progressContainer {
+      .chartContainer {
+        height: 80%;
+        width: 70%;
+        margin-top: 20px;
+      }
     }
-  }
-  section {
-    text-align: center;
+    section {
+      text-align: center;
 
-    .changesButtons {
+      .changesButtons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        button {
+          display: inline-flex;
+          justify-content: space-between;
+        }
+      }
+    }
+
+    .calendarContainer {
+      overflow-y: auto;
+      .subtitle {
+        color: v.$white-color;
+      }
+      ul {
+        list-style-type: none;
+        li {  
+          display: block;
+          background-color: v.$medium-grey;
+          color: white;
+          font-size: 1.1rem;
+          margin: 1rem 0.2rem;
+          border-radius: 0.5rem;
+          padding: 1rem;
+          text-align: left;
+          button {
+            margin-top: 1rem; 
+            padding: 0.5rem;
+          }
+        }
+      }
+    }
+    
+    .manipulationContainer, .progressContainer, .closestWorkouts {
+      background-color: v.$grey;
+      margin: 20px;
+      border-radius: 10px;
+      padding: 20px;
+      border: 1px solid v.$light-grey;
+      height: 100%;
+      h2 {
+        margin-bottom: 20px;
+      }
+    }
+    .manipulationContainer {
+      a {
+          background-color: v.$light-blue;
+          width: 60%;
+          text-align: left;
+          text-decoration: none;
+          padding: 0.5rem;
+          border-radius: 0.5rem;
+          font-size: 1.1rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1rem;
+      }
+      a:hover {
+        background-color: v.$white-color;
+        color: black;
+      }
+    }
+    .progressContainer {
       display: flex;
       flex-direction: column;
       align-items: center;
-      button {
-        display: inline-flex;
-        justify-content: space-between;
-      }
     }
-  }
-
-  .notActive {
-    visibility: hidden;
-  }
-
-  .calendarContainer {
-    overflow: auto;
-    .subtitle {
-      color: v.$white-color;
-    }
-    ul {
-      list-style-type: none;
-      li {
-        display: block;
-        background-color: v.$medium-grey;
-        color: white;
-        font-size: 1.1rem;
-        margin: 10px 5px;
-        border-radius: 5px;
-        padding: 10px;
-        text-align: left;
-      }
-    }
-  }
-  
-  .manipulationContainer, .progressContainer, .closestWorkouts {
-    background-color: v.$grey;
-    margin: 20px;
-    border-radius: 10px;
-    padding: 20px;
-    border: 1px solid v.$light-grey;
-    height: 100%;
-    h2 {
-      margin-bottom: 20px;
-    }
-  }
-  .manipulationContainer {
-    a {
-        background-color: v.$light-blue;
-        width: 50%;
-        text-align: left;
-        padding-left: 15px;
-        text-decoration: none;
-        padding: 5px;
-        border-radius: 5px;
-        font-size: 1.2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-    a:hover {
-      background-color: v.$white-color;
-      color: black;
-    }
-  }
-  .progressContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 }
-
-//i don't know if better is mixing styles
+//add mixins
 @media screen and (max-width: 768px) {
   .mainBlocksContainer {
     grid-template-columns: auto;

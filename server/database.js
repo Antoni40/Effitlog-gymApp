@@ -95,14 +95,14 @@ export async function getWorkout(userWorkoutID, userID){
   const conn = await pool.getConnection();
   try {
     const [result] = await conn.query(`
-          SELECT exercises.id AS exercise_id ,workouts.name AS workout_name, users_workouts.id AS user_workout_id, workouts.id AS workout_id, workouts.description AS description, exercises_in_workouts.sets AS sets, users_workouts.workout_date AS date,
-          exercises_in_workouts.reps AS reps, exercises_in_workouts.exercise_order AS exercise_order, exercises.name AS exercise_name, exercises.muscle_group AS exercise_muscle_group
+          SELECT exercises.id AS exercise_id, workouts.name AS workout_name, workouts.id AS workout_id, users_workouts.id AS user_workout_id, workouts.id AS workout_id, workouts.description AS description, exercises_in_workouts.sets AS sets, users_workouts.workout_date AS date,
+          exercises_in_workouts.id AS exercise_in_workout_id, exercises_in_workouts.reps AS reps, exercises_in_workouts.exercise_order AS exercise_order, exercises.name AS exercise_name, exercises.muscle_group AS exercise_muscle_group
           FROM users_workouts 
           INNER JOIN workouts ON users_workouts.workout_id = workouts.id
           INNER JOIN exercises_in_workouts ON workouts.id = exercises_in_workouts.workout_id
           INNER JOIN exercises ON exercises.id = exercises_in_workouts.exercise_id
           INNER JOIN users ON users.id = users_workouts.user_id
-          WHERE users_workouts.user_id = ? AND users_workouts.id = ?
+          WHERE users_workouts.user_id = ? AND users_workouts.id = ? AND is_completed = 0
           AND users_workouts.is_completed != true
       `, [userID, userWorkoutID]);
 
@@ -115,7 +115,7 @@ export async function getWorkout(userWorkoutID, userID){
 export async function getNextWorkoutID(userWorkoutID, userID){
   const conn = await pool.getConnection();
   try {
-    const [result] = await conn.query(`SELECT id FROM users_workouts WHERE id > ? AND user_id = ? 
+    const [result] = await conn.query(`SELECT id FROM users_workouts WHERE id > ? AND user_id = ? AND is_completed = 0
       ORDER BY workout_id ASC LIMIT 1`, [userWorkoutID, userID]);
     
     return result[0] ? result[0].id : null;
@@ -127,7 +127,7 @@ export async function getNextWorkoutID(userWorkoutID, userID){
 export async function getPrevWorkoutID(userWorkoutID, userID){
   const conn = await pool.getConnection();
   try {
-    const [result] = await conn.query(`SELECT id FROM users_workouts WHERE id < ? AND user_id = ? 
+    const [result] = await conn.query(`SELECT id FROM users_workouts WHERE id < ? AND user_id = ? AND is_completed = 0 
       ORDER BY workout_id DESC LIMIT 1`, [userWorkoutID, userID]);
 
     return result[0] ? result[0].id : null; 
@@ -181,7 +181,7 @@ export async function addWorkout(date, workout_title, exercises, user_id){
 
   try {
   await conn.beginTransaction();
-
+  
   const [result] = await conn.query(`INSERT INTO workouts(name) VALUES(?)`, [workout_title]);
   let exercise_order = 1;
   for(const exercise of exercises) {
@@ -202,15 +202,25 @@ export async function addWorkout(date, workout_title, exercises, user_id){
 }
 
 export async function setWorkoutChanges(workoutID, workout_title, workout_date, workout_exercises, userID) {
+  console.log(workoutID, workout_title, workout_date, workout_exercises, userID)
   const conn = await pool.getConnection();
 
   try {
     await conn.beginTransaction();
+    console.log("workoutID:", workoutID);
     
-    await conn.query('UPDATE users_workout SET workout_date = ?  WHERE user_id = ? AND workout_id = ?', [workout_date, userID, workoutID]);
-    await conn.query('UPDATE workouts SET name = ? WHERE workouts.id = ?', [workout_title, workoutID]);
-    for(exercise of workout_exercises) {
-      await conn.query('UPDATE exercises_in_workouts SET exercise_id = ?, sets = ?, reps = ?, exercise_order = ?', [exercise.id, exercise.sets, exercise.reps])
+    await conn.query('UPDATE users_workouts SET workout_date = ?  WHERE user_id = ? AND workout_id = ?',
+       [workout_date, userID, workoutID]);
+
+    await conn.query('UPDATE users_workouts INNER JOIN workouts ON users_workouts.workout_id = workouts.id SET workouts.name = ? WHERE users_workouts.id = ?', 
+      [workout_title, workoutID]);
+    
+    await conn.query(`DELETE FROM exercises_in_workouts WHERE workout_id = ?`, [workoutID]);
+
+    for(const exercise of workout_exercises) {
+        await conn.query(`INSERT INTO exercises_in_workouts(workout_id, exercise_id, sets, reps, exercise_order) 
+        VALUES(?, ?, ?, ?, ?)`, 
+        [workoutID, exercise.exercise_id, exercise.sets, exercise.reps, exercise.exercise_order]);
     }
     
     await conn.commit();

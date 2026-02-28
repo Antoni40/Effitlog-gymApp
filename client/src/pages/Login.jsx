@@ -2,32 +2,31 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import styles from '../scss/Forms.module.scss'
 import { useEffect } from 'react';
+import '../scss/main.scss';
 
 
-function Login({setLoggedIn}){
-
-  //maybe it's better to use redirect but navigate have more options
+function Login(){ 
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("I'm working if you have logged in lately you should be redirect to /dashboard");
-
     fetch('http://localhost:8080/api/isUserLoggedIn', {
       method: "GET",
       credentials: 'include'
     })
       .then((res) => {
+        if(!res.ok) {
+          throw new Error("HTTP error: " + res.status);
+        }
         return res.json();
       })
-      .then((res) => {
-          const success = res.success;
-          console.log(success);
-          if(success) {
-            console.log('We will navigate to dashboard now');
-            navigate('/dashboard');
-          } else {
-            console.log("please log in")
-          }
+      .then((res_data) => {
+        if(!res_data.success) {
+          throw new Error("Internal server error");
+        } 
+        navigate('/dashboard')
+      })
+      .catch((err) => {
+        console.error(err);
       })
   }, []);
 
@@ -57,19 +56,22 @@ function Login({setLoggedIn}){
       },
       body: JSON.stringify({ email: loginData.login, password: loginData.password}),
     })
-      .then(res => {
-        return res.json();
-      })
-      .then(data => {
-        if(data.success){
-          navigate('/dashboard')
-        } else {
-          alert("Incorrect data!");
-        }
-      })
-      .catch((err) => {
-        alert(`Server error ${err}`);
-      }) 
+    .then((res) => {
+      if(!res.ok){
+        throw new Error("HTTP error: " + res.status);
+      }
+      return res.json();
+    })
+    .then((res_data) => {
+      if(!res_data.success){
+        throw new Error("Internal server error");
+      }
+      navigate('/dashboard');
+    })
+    .catch((err) => {
+      console.err(err);
+      alert(err.message);
+    }) 
   }
 
 
@@ -78,9 +80,9 @@ function Login({setLoggedIn}){
       <div className={styles.signInContainer}>
         <h1>Sign-in</h1>
         <p>Welcome back! Please enter your details.</p>
+
         <div className={styles.FormContainer}>
-          <form method='POST' 
-            onSubmit={(e) => {handleLogin(e)}} 
+          <form onSubmit={(e) => {handleLogin(e)}} 
             className={styles.Form}>
 
             <label htmlFor="login">E-mail</label>
@@ -89,6 +91,7 @@ function Login({setLoggedIn}){
               name="login" 
               value={loginData.login} 
               onChange={updateLogin}
+              required
               />
 
             <label htmlFor="password">Password</label>
@@ -96,14 +99,18 @@ function Login({setLoggedIn}){
               id="password" 
               name="password" 
               value={loginData.password} 
-              onChange={updateLogin}/>
+              onChange={updateLogin}
+              required/>
 
             <button>Sign-in</button>
           </form>
         </div>
-        <p>Don't have an account?<br/>
+
+        <p>
+          Don't have an account?<br/>
           <Link to="/register">Sign-up</Link>
         </p>
+
       </div>
     </div>
   )

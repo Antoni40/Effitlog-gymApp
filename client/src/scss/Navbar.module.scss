@@ -1,0 +1,50 @@
+@use './mixins.scss' as m;
+@use './variables.scss' as v;
+
+.navHeader {
+  position: sticky;
+  top: 0;
+
+  .navContainer {
+    .mainNavigation {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: v.$black;
+      height: 4rem;
+      font-size: 1.3rem;
+      padding: 0 2rem;
+      color: v.$white-color;
+
+      .buttonsContainer {
+        display: flex;
+        align-items: center;
+        gap: 1rem; 
+
+        a, button  {
+          background-color: inherit;
+          font-size: 1.3rem;
+          color: inherit;
+          font-weight: bold;
+          text-decoration: none;
+          transition: all 0.2s ease-in-out;
+          padding: 0.5rem;
+          
+          &:last-of-type {
+            background-color: v.$white-color;
+            color: v.$black;
+            border: none;
+            border-radius: 0.5rem;
+          }
+          &:last-of-type:hover {
+            background: rgba(255, 255, 255, 0.8);
+          }
+
+          &:hover, &:focus {
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+  }
+}

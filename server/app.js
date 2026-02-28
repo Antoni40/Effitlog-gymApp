@@ -9,7 +9,7 @@ import {getUsers, getUser, createUser,
         addWorkout, deleteWorkout,
         getNextWorkoutID,
         getPrevWorkoutID,
-        getWorkoutsResults} from './database.js'
+        getWorkoutsResults, setWorkoutChanges} from './database.js'
 
 const app = express();
 
@@ -70,13 +70,13 @@ app.post('/api/checkUserData', async (req, res) => {
   if(!result){  
     //401 - not valid authentication
     //is it worth to use return there
-    return res.status(401).json({success: false, message: "account with that email doesn't exist"});
+    return res.status(401).json({success: false, error: "Invalid login data"});
   }
 
   const passwordMatch = await bcrypt.compare(password, result.password);
 
   if (!passwordMatch){
-    return res.status(401).json({success: false, message: "wrong password" });
+    return res.status(401).json({success: false, error: "wrong password" });
   } 
 
   const userData = {id: result.id, name: result.name, email: result.email};
@@ -172,16 +172,18 @@ app.get('/api/getExercises', cookieJwtAuth, async (req, res) => {
 })
 
 app.post('/api/setNewWorkout', cookieJwtAuth, async(req, res) => {
-  const {workoutData, workoutRows} = await req.body;
+  const {workoutData, workoutRows} = req.body;
   console.log(typeof workoutRows);
   const result = await addWorkout(workoutData.date, workoutData.workout_title, workoutRows, req.user.id);
   res.status(200).json({success: true, result });
 })
 
 app.post('/api/setWorkoutChanges/:id', cookieJwtAuth, async(req, res) => {
-  const workoutID = req.params.id;
-  const {workoutData, workoutRows} = await req.body;
-  const result = await setWorkoutChanges(workoutID, workoutData.workout_title, workoutData.date, workoutRows, req.user.id);
+  const userWorkoutID = req.params.id;
+  const {workoutData, workoutRows} = req.body;
+  const workoutID = workoutData.workout_id;
+  console.log(workoutData, workoutRows);
+  const result = await setWorkoutChanges(workoutID, workoutData.workout_title, workoutData.workout_date, workoutRows, req.user.id);
   res.status(200).json({success: true, result: result});
 })
 

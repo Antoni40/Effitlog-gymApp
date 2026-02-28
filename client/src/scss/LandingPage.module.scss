@@ -1,0 +1,93 @@
+  @use './mixins.scss' as m;
+  @use './variables.scss' as v;
+
+
+  header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+  .mainContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: calc(100vh - 4rem);
+    width: 100%;
+
+    .appTitleContainer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;  
+      background-color: v.$dark-blue;
+      text-align: center;
+
+      h1 {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        font-size: 2rem;
+        opacity: 0.9;
+      }
+    }
+
+    .appPictureContainer {
+      background-color: v.$white-color;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      img {
+        width: 70%;
+        object-fit: contain;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+      }
+    }
+  }
+    .discoverySection {
+      max-width: 1000px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+
+      h2 {
+        margin: 1rem 0;
+        font-size: 3rem;
+      }
+      p {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      a {
+        display: inline-block;
+        padding: 0.8rem 1.5rem;
+        color: white;
+        background-color: v.$light-blue;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: all 0.2s;
+
+        &:hover {
+          background-color: v.$white-color;
+          color: black
+        } 
+      }
+    }
+
+  @media screen and (max-width: 768px){
+    * {
+      font-size: 0.8rem;
+    }
+    .mainContent {
+      grid-template-columns: 100%;
+      grid-template-rows: repeat(2, calc((100vh - 4rem)));
+      img {
+        width: 80%;
+      }
+      .appPictureContainer {
+        padding-top: 2vh;
+      }
+    }
+  }
