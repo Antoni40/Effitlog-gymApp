@@ -7,33 +7,9 @@ import '../scss/main.scss';
 
 function Login(){ 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetch('http://localhost:8080/api/isUserLoggedIn', {
-      method: "GET",
-      credentials: 'include'
-    })
-      .then((res) => {
-        if(!res.ok) {
-          throw new Error("HTTP error: " + res.status);
-        }
-        return res.json();
-      })
-      .then((res_data) => {
-        if(!res_data.success) {
-          throw new Error("Internal server error");
-        } 
-        navigate('/dashboard')
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-  }, []);
-
-
   const [loginData, setLoginData] = useState({
-    login: "",
-    password: ""
+  login: "",
+  password: ""
   });
 
   function updateLogin(e){
@@ -44,34 +20,57 @@ function Login(){
     })
     )
   }
-  
-  function handleLogin(e){
-    e.preventDefault();
 
-    fetch("http://localhost:8080/api/checkUserData", {
-      method: "POST",
-      credentials: 'include',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email: loginData.login, password: loginData.password}),
-    })
-    .then((res) => {
-      if(!res.ok){
-        throw new Error("HTTP error: " + res.status);
+  useEffect(() => {
+    async function isUserLoggedIn() {
+      try {
+        const res = await fetch('http://localhost:8080/api/isUserLoggedIn', {
+          method: "GET",
+          credentials: 'include'
+        })
+        if(!res.ok) {
+          throw new Error("HTTP error: " + res.status);
+        }
+        const res_data = await res.json();
+      
+        if(!res_data.success) {
+          throw new Error("Internal server error");
+        } 
+        navigate('/dashboard')
+      
+      } catch(err) {
+          console.error(err);
       }
-      return res.json();
-    })
-    .then((res_data) => {
-      if(!res_data.success){
-        throw new Error("Internal server error");
-      }
-      navigate('/dashboard');
-    })
-    .catch((err) => {
-      console.err(err);
+    }
+  isUserLoggedIn();
+  }, []);
+  
+  async function handleLogin(e){
+    e.preventDefault();
+    try{
+      const res = await fetch("http://localhost:8080/api/checkUserData", {
+        method: "POST",
+        credentials: 'include',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email: loginData.login, password: loginData.password}),
+      })
+
+        if(!res.ok){
+          throw new Error("HTTP error: " + res.status);
+        }
+        const res_data = await res.json();
+
+        if(!res_data.success){
+          throw new Error("Internal server error");
+        }
+        navigate('/dashboard');
+        
+    } catch(err) {
+      console.error(err);
       alert(err.message);
-    }) 
+    }
   }
 
 

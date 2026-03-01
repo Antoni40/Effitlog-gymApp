@@ -20,32 +20,32 @@ function Register(){
     }));
   }
   
-  function handleSubmit(e){
+  async function handleSubmit(e){
     e.preventDefault();
+    try {
+      const res = await fetch('http://localhost:8080/api/registerUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(registerData)
+      })
 
-    fetch('http://localhost:8080/api/registerUser', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(registerData)
-    })
-      .then((res) => {
-        if(!res.ok){
-          throw new Error("HTTP error: " + res.status);
-        }
-        return res.json()
-      })
-      .then((data) => {
-        if(!data.success){
-          throw new Error('Internal server error');
-        } 
-        navigate('/login');
-      })
-      .catch((err) => {
+      if(!res.ok){
+        throw new Error("HTTP error: " + res.status);
+      }
+      
+      const res_data = await res.json()
+
+      if(!res_data.success){
+        throw new Error('Internal server error');
+      } 
+      navigate('/login');
+
+    } catch (err) {
         console.error(err);
         alert(err.message);
-      })
+      }
   }
 
   return (

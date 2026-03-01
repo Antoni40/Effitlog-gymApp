@@ -4,7 +4,7 @@ import { iconsLowerBody, iconsUpperBody} from "../assets/icons.js"
 import styles from '../scss/WorkoutExecution.module.scss';
 import Navbar from "../components/NavigationBar.jsx";
 import '../scss/main.scss';
-import fetchDataGET from "../utils/fetchDataGET.js";
+import fetchHelper from "../utils/fetchHelper.js";
 
 function WorkoutExecution(){
 
@@ -30,33 +30,37 @@ function WorkoutExecution(){
   }
 
   useEffect(() => {
-    fetchDataGET(`http://localhost:8080/api/getWorkout/${id}`)
-      .then((res_data) => {
-        if(!res_data.success){
-          throw new Error("Internal server error")
-        }
-        const exercises = res_data.result; 
-        const nextWorkoutID = res_data.nextWorkoutID ? res_data.nextWorkoutID : id;
-        const prevWorkoutID = res_data.prevWorkoutID ? res_data.prevWorkoutID : id;
-        
-        setWorkoutData({workout_title: exercises[0].workout_name, 
-                        workout_date: exercises[0].date, 
-                        nextWorkoutID, prevWorkoutID});
-        setWorkoutExercises(exercises.map(exercise => (
-            {
-              ...exercise, 
-              done: false, 
-              load: ''
-            }
-          ))
-        );
-      })
-      .catch((err) => {
+    async function getWorkout() {
+      try {
+      const res_data = await fetchHelper(`http://localhost:8080/api/getWorkout/${id}`, {method: 'GET'});
+
+      if(!res_data.success){
+        throw new Error("Internal server error")
+      }
+
+      const exercises = res_data.result; 
+      const nextWorkoutID = res_data.nextWorkoutID ? res_data.nextWorkoutID : id;
+      const prevWorkoutID = res_data.prevWorkoutID ? res_data.prevWorkoutID : id;
+      
+      setWorkoutData({workout_title: exercises[0].workout_name, 
+                      workout_date: exercises[0].date, 
+                      nextWorkoutID, prevWorkoutID});
+      setWorkoutExercises(exercises.map(exercise => (
+          {
+            ...exercise, 
+            done: false, 
+            load: ''
+          }
+        )));
+
+      } catch(err) {
         console.error(err);
         if(err.message === "unauthorized") {
           navigate('/login');
         }
-      })
+      }
+    }
+    getWorkout();
   }, [id]);
 
 
@@ -73,46 +77,40 @@ function WorkoutExecution(){
     } else {
       alert("You did all exercises, congratulations");
 
-      fetch(`http://localhost:8080/api/setWorkoutDone`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json"},
-        credentials: 'include',
-        body: JSON.stringify(
-          workoutExercises.map(exercise => ({
-            userWorkoutID: exercise.user_workout_id,
-            exerciseID: exercise.exercise_id,
-            sets: exercise.sets,
-            reps: exercise.reps,
-            exerciseOrder: exercise.exercise_order,
-            load: exercise.load
-          }))
-        )
-      })
-        .then((res) => {
-          if(res.status === 401){
-            alert("Session expired, please log in again");
-            throw new Error("unauthorized");
-          }
-          if(!res.ok){
-            throw new Error("HTTP error" + res.status)
-          }
-          return res.json();
-        })
-        .then((res_data) => {
+      async function setWorkoutDone() {
+        try {
+          const res_data = await fetchHelper(`http://localhost:8080/api/setWorkoutDone`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json"},
+            credentials: 'include',
+            body: JSON.stringify(
+              workoutExercises.map(exercise => ({
+                userWorkoutID: exercise.user_workout_id,
+                exerciseID: exercise.exercise_id,
+                sets: exercise.sets,
+                reps: exercise.reps,
+                exerciseOrder: exercise.exercise_order,
+                load: exercise.load
+              }
+            )))
+          })
+
           if(!res_data.success){
             throw new Error("Internal server error");
           }
           navigate('/dashboard');
-        })
-        .catch((err) => {
+        
+        } catch(err) {
           console.error(err);
           alert(err.message);
           if(err.message === "unauthorized") {
             navigate('/login');
           }
-        })
+        }
     }
+    setWorkoutDone();
   }
+}
 
 
   return(

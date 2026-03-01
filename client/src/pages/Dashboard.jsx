@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faPencil, faTrash, faCalendar, faGear } from '@fortawesome/free-solid-svg-icons'
 import Navbar from '../components/NavigationBar.jsx';
 import '../scss/main.scss';
-import fetchDataGET from '../utils/fetchDataGET.js';
+import fetchHelper from '../utils/fetchHelper.js';
 
 function Dashboard(){
   const navigate = useNavigate();
@@ -20,95 +20,110 @@ function Dashboard(){
   const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
  
   useEffect(() => {
-    fetchDataGET('http://localhost:8080/api/getName')
-      .then((res_data) => {
+
+    async function getName(){
+      try {
+        const res_data = await fetchHelper('http://localhost:8080/api/getName', {method: 'GET'});
+
         if(!res_data.success) {
           throw new Error("Internal server error");
         }
-        const {userName} = res_data;
-        setName(userName);
-      })
-      .catch((err) => {
+        setName(res_data.userName);
+
+      } catch (err) {
         console.error(err);
+
         if(err.message === "unauthorized") {
           navigate('/login');
         }
-      })
+      }
+    }
+
+    getName();
   }, []);
 
   useEffect(() => {
-    fetchDataGET('http://localhost:8080/api/getWorkoutsResults')
-    .then((res_data) => {
-      if(!res_data.success) {
+
+    async function getWorkoutsResults(){
+      try {
+        const res_data = await fetchHelper('http://localhost:8080/api/getWorkoutsResults', {method: 'GET'});
+
+        if(!res_data.success) {
           throw new Error("Internal server error");
-      }
-      const workouts_results = res_data.result;
-      let usedWeightInTrainings = {};
-
-      workouts_results.forEach((element) => {
-        const id = element.user_workout_id;
-        const weight = Number(element.used_weight * element.sets * element.reps);
-        const date = new Date(element.workout_date).toLocaleDateString();
-
-        if(!usedWeightInTrainings[id]){
-          usedWeightInTrainings[id] = {
-            workout_weight: 0,
-            workout_date: date
-          }
         }
-      
-        usedWeightInTrainings[id].workout_weight += weight;
- 
-      })
-      const array = Object.values(usedWeightInTrainings)
-      setWorkoutsResults(array);
-    })
-    .catch((err) => {
-      console.error(err);
-      if(err.message === "uauthorized") {
-        navigate('/login');
+        const workouts_results = res_data.result;
+        let usedWeightInTrainings = {};
+
+        workouts_results.forEach((element) => {
+          const id = element.user_workout_id;
+          const weight = Number(element.used_weight * element.sets * element.reps);
+          const date = new Date(element.workout_date).toLocaleDateString();
+
+          if(!usedWeightInTrainings[id]){
+            usedWeightInTrainings[id] = {
+              workout_weight: 0,
+              workout_date: date
+            }
+          }
+
+          usedWeightInTrainings[id].workout_weight += weight;
+  
+        })
+        const array = Object.values(usedWeightInTrainings)
+        setWorkoutsResults(array);
+      } catch (err) {
+        console.error(err);
+
+        if(err.message === "unauthorized") {
+          navigate('/login');
+        }
       }
-    })
+    }
+    getWorkoutsResults();
   }, []);
 
   useEffect(() => {
-    fetchDataGET('http://localhost:8080/api/calendar/getWorkouts')
-      .then((res_data) => {
+    async function getWorkouts(){
+      try {
+        const res_data = await fetchHelper('http://localhost:8080/api/calendar/getWorkouts', {method: 'GET'});
+
         if(!res_data.success) {
           throw new Error("Internal server error");
         }
 
         setWorkouts(res_data.workouts);
         setTempUpdateURL(res_data.workouts[0].user_workout_id);
-      })
-      .catch((err) => {
-        console.error(err)
+      } catch (err) {
+        console.error(err);
+
         if(err.message === "unauthorized") {
           navigate('/login');
         }
-      })
+      }
+    }
+
+    getWorkouts();
   }, [])
 
-  function logOut() {
-    fetch('http://localhost:8080/api/logout', {
-      method: 'GET',
-      credentials: 'include'
-    })
-      .then((res) => {
-        if(!res.ok){
-          throw new Error("HTTP error: " + res.status);
-        } 
-        return res.json();
+  async function logOut() {
+    try {
+      const res = await fetch('http://localhost:8080/api/logout', {
+        method: 'GET',
+        credentials: 'include'
       })
-      .then((res_data) => {
-        if(!res_data.success) {
-          throw new Error("Internal server error");
-        }
-        navigate('/');
-      })
-      .catch((err) => {
-        console.error(err);
-      })
+      if(!res.ok){
+        throw new Error("HTTP error: " + res.status);
+      } 
+      const res_data = await res.json();
+
+      if(!res_data.success) {
+        throw new Error("Internal server error");
+      }
+      navigate('/');
+
+    } catch(err) {
+      console.error(err);
+    }
   }
 
   return(
@@ -170,7 +185,7 @@ function Dashboard(){
                                     </p>
                                   </div>
                                   <div>
-                                    <button onClick={() => {navigate(`/workouts/${workout.user_workout_id}`)}}>Start workout</button>
+                                    <button onClick={() => {navigate(`/workouts/${workout.user_workout_id}`)}}>Full workout view/Start workout</button>
                                   </div>
                                 </li>
                       }) : <p>No workouts available add new workout</p>}

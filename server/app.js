@@ -191,7 +191,7 @@ app.delete('/api/deleteWorkout/:id', cookieJwtAuth, async (req, res) => {
   const user_workout_id  = req.params.id;
   console.log("workout id: " + user_workout_id);
   const result = await deleteWorkout(user_workout_id);
-  res.status(200).json({succes: true, result: result});
+  res.status(200).json({success: true, result: result});
 })
 
 app.get('/api/getWorkoutsResults', cookieJwtAuth, async (req, res) => {

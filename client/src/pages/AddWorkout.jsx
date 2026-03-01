@@ -3,7 +3,7 @@ import styles from '../scss/ExerciseForm.module.scss';
 import {Link, useNavigate} from 'react-router-dom';
 import Navbar from '../components/NavigationBar';
 import '../scss/main.scss';
-import fetchDataGET from '../utils/fetchDataGET';
+import fetchHelper from '../utils/fetchHelper.js';
 
 function AddWorkout(){
   const navigate = useNavigate();
@@ -15,58 +15,56 @@ function AddWorkout(){
   const [workoutData, setWorkoutData] = useState({});
 
   useEffect(() => {
-    fetchDataGET('http://localhost:8080/api/getExercises')
-    .then((res_data) => {
-      if(!res_data.success) {
-        throw new Error("Internal server error")
-      }
-      setAvailableExercises(res_data.result);
-      setLoading(false);
-    }) 
-    .catch((err) => {
-      console.error(err);
-      if(err.message === 'unauthorized') {
-        navigate('/login');
-      }
-    })
-  }, []);
+    async function getExercises(){
+      try {
+        const res_data = await fetchHelper('http://localhost:8080/api/getExercises', {method: 'GET'});
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    
-    fetch('http://localhost:8080/api/setNewWorkout', {
-      method: "POST",
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        workoutData, 
-        workoutRows
-      })
-    })
-      .then((res) => {
-        if(res.status === 401){
-          alert("Session expired, please log in again");
-          throw new Error("unauthorized");
+        if(!res_data.success) {
+          throw new Error("Internal server error");
         }
-        if(!res.ok){
-          throw new Error("HTTP error" + res.status);
-        }
-        return res.json();
-      })
-      .then((res_data) => {
-        if(!res_data.success){
-          throw new Error('Internal server error');
-        }
-        console.log("workout was added properly");
-      })
-      .catch((err) => {
+
+        setAvailableExercises(res_data.result);
+        setLoading(false);
+
+      } catch (err) {
         console.error(err);
-        if(err.message === 'unauthorized'){
+        if(err.message === "unauthorized") {
           navigate('/login');
         }
+      }
+    }
+
+    getExercises();
+  }, []);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    try {
+      const res_data = await fetchHelper('http://localhost:8080/api/setNewWorkout', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          workoutData, 
+          workoutRows
+        })
       })
+
+      if(!res_data.success){
+        throw new Error('Internal server error');
+      }
+
+      console.log("workout was added properly");
+      navigate('/workouts/calendar')
+
+    } catch (err) {
+      console.error(err);
+      if(err.message === 'unauthorized'){
+        navigate('/login');
+      }
+    }
   }
   
   function handleInputChange(index, field, value) {
