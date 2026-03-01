@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import styles from '../scss/Navbar.module.scss';
+import icon from '../assets/app_logo.png';
 
 function Navbar({links}){
   return(
@@ -7,7 +8,9 @@ function Navbar({links}){
       <div className={styles.navContainer}>
         <nav className={styles.mainNavigation}>
           <div className={styles.logoContainer}>
-            <img src="" alt="Logo" />
+            <Link to={'/'}>
+              Home
+            </Link>
           </div>
           <div className={styles.buttonsContainer}>
             {links.map((link, index) =>  {

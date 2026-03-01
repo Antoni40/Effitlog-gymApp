@@ -16,6 +16,13 @@
       padding: 0 2rem;
       color: v.$white-color;
 
+      .logoContainer {
+        a {
+          text-decoration: none;
+          font-weight: bold;
+        }
+      }
+
       .buttonsContainer {
         display: flex;
         align-items: center;

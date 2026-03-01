@@ -37,18 +37,16 @@
                 div {
                   width: 25rem;
                 }
-
                 input[type="checkbox"] {
-                  margin-left: 2rem;  
                   appearance: none;
-                  margin-right: 2rem;  
+                  margin-right: 2rem;
                   width: 1.5rem;
                   height: 1.5rem;
                   border: 2px solid v.$light-grey;
                   border-radius: 4px;
                   cursor: pointer;
                   position: relative;
-                  transition: all 0.2s ease;
+                  transition: all 0.2s ease-in-out;
 
                   &:hover {
                     border-color: v.$white-color;
