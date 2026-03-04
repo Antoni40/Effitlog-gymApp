@@ -70,7 +70,7 @@ app.get('/auth/refreshToken', async (req, res) => {
         email: user.email
       },
       process.env.JWT_SECRET, {
-        expiresIn: '15m'
+        expiresIn: '1m'
     });
       
     res.cookie('accessToken', accessToken, {
@@ -81,6 +81,7 @@ app.get('/auth/refreshToken', async (req, res) => {
     res.status(200).json({success: true});
   } catch(err) {
     res.clearCookie('refreshToken');
+    res.clearCookie('accessToken');
     res.status(401).json({success: false, message: "unauthorized"})
   }
   
@@ -111,7 +112,7 @@ app.post('/api/checkUserData', async (req, res) => {
       email: user.email
     };
 
-    const accessToken = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '15m' });
+    const accessToken = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '1m' });
     const refreshToken = jwt.sign({id: userData.id}, process.env.JWT_SECRET, { expiresIn: '7d'});
 
     res.cookie('accessToken', accessToken, {
