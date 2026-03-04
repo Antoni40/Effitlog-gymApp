@@ -47,7 +47,7 @@ export async function createUser(name, surname, email, password){
   }
 }
 
-export async function checkUserData(email){
+export async function checkUserEmail(email){
   const conn = await pool.getConnection();
   try {
     const [result] = await conn.query(`
