@@ -1,7 +1,6 @@
 @use './mixins.scss' as m;
 @use './variables.scss' as v;
 
-
 .contentContainer {
   display: flex;
   justify-content: center;
@@ -57,10 +56,26 @@
           border-radius: 8px;
           font-size: 1.2rem;
           width: 100%;
-          padding: 5px;
+          padding: 0.4rem;
         }
+        .passwordInputContainer {
+          position: relative;
+        }
+
         label:nth-of-type(2n) {
           margin-top: 15px;
+        }
+
+        .showPasswordToggler {
+          position: absolute;
+          top: 0;
+          padding: 0.5rem;
+          font-size: 1.2rem;
+          right: 0;
+          margin: 0.3rem 0;
+          cursor: pointer;
+          width: fit-content;
+          background-color: transparent;
         }
 
         button {
@@ -79,6 +94,33 @@
 
         input {
           border: 1px solid black;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .contentContainer {
+    .signInContainer {
+      width: 80%;
+      margin: 5% auto;
+      .FormContainer {
+        .Form {
+          .namesContainer {
+            display: block;
+            margin: 0;
+            flex-direction: column;
+            div {
+              padding-bottom: 5px;
+              input {
+                margin-top: 10px;
+                margin-bottom: 0;
+              }
+            }
+          }
+            label {
+              margin-top: 15px;
+            }
         }
       }
     }

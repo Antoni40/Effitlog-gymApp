@@ -1,6 +1,9 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
+import isPasswordValid from '../utils/isPasswordValid.js'
 import styles from '../scss/AuthForm.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons'
 import '../scss/main.scss';
 
 function Register(){
@@ -11,6 +14,7 @@ function Register(){
     email: "",
     password: ""
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   function handleChange(e){
     const { name, value } = e.target;
@@ -19,9 +23,18 @@ function Register(){
       [name]: value
     }));
   }
-  
+
   async function handleSubmit(e){
     e.preventDefault();
+
+    if(!isPasswordValid(registerData.password)){
+      alert(`The password doesn't meet requirements: 
+      min. 8 characters, min. 1 digit, min. 1 symbol, 
+      min. 1 upper case letter, min. 1 lower case letter`);
+      
+      return;
+    }
+
     try {
       const res = await fetch('http://localhost:8080/api/registerUser', {
         method: 'POST',
@@ -87,12 +100,20 @@ function Register(){
                 onChange={handleChange}/>
             
               <label htmlFor="password">Password</label>
-              <input 
-                type="password" 
-                id="password"
-                name="password"
-                value={registerData.password}
-                onChange={handleChange}/>
+              <div className={styles.passwordInputContainer}>
+                <input 
+                  type={showPassword ? 'text' : 'password'} 
+                  id="password"
+                  name="password"
+                  value={registerData.password}
+                  onChange={handleChange}/>
+
+                <button type='button'
+                  className={styles.showPasswordToggler}
+                  onClick={() => {setShowPassword(prev => !prev)}}
+                  ><FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
+                </button>
+              </div>
 
               <button>Sign-up</button>
 

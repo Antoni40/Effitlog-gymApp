@@ -2,6 +2,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import styles from '../scss/AuthForm.module.scss';
 import { useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons'
 import '../scss/main.scss';
 
 
@@ -11,6 +13,7 @@ function Login(){
   login: "",
   password: ""
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   function updateLogin(e){
     const {name, value} = e.target;
@@ -94,12 +97,20 @@ function Login(){
               />
 
             <label htmlFor="password">Password</label>
-            <input type="password" 
-              id="password" 
-              name="password" 
-              value={loginData.password} 
-              onChange={updateLogin}
-              required/>
+            <div className={styles.passwordInputContainer}>
+              <input 
+                type={showPassword ? 'text' : 'password'} 
+                id="password"
+                name="password"
+                value={loginData.password}
+                onChange={updateLogin}/>
+
+              <button type='button'
+                className={styles.showPasswordToggler}
+                onClick={() => {setShowPassword(prev => !prev)}}
+                ><FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
+              </button>
+            </div>
 
             <button>Sign-in</button>
           </form>
