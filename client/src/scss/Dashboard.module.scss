@@ -18,20 +18,6 @@
     grid-template-rows: 70vh;
 
     .progressContainer {
-      .underweight{
-        background-color: v.$very-light-blue;
-        color: black
-      }
-      .normal {
-        background-color: v.$light-green;
-      }
-      .overweight {
-        background-color: v.$light-yellow;
-        color: black;
-      }
-      .obesitiy {
-        background-color: v.$light-red;
-      }
       .chartContainer {
         width: 70%;
         margin-top: 1rem;
@@ -43,21 +29,54 @@
         margin-top: 1rem;
         display: flex;
         flex-direction: column;
+
+        .underweight{
+          font-weight: bold;
+          width: 100%;
+          background-color: v.$very-light-blue;
+          padding: 0.5rem;
+          border-radius: 1rem;
+        }
+        .normal {
+          font-weight: bold;
+          width: 100%;
+          background-color: v.$light-green;
+          padding: 0.5rem;
+          border-radius: 1rem;
+        }
+        .overweight {
+          font-weight: bold;
+          width: 100%;
+          background-color: v.$light-yellow;
+          padding: 0.5rem;
+          border-radius: 1rem;
+        }
+        .obesity {
+          font-weight: bold;
+          width: 100%;
+          background-color: v.$light-red;
+          padding: 0.5rem;
+          border-radius: 1rem;
+        }
         h3 {
           margin-bottom: 1rem;
           
         }
         form {
           display: flex;
-          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
           label {
             display: block;
             text-align: left;
           }
+          button {
+            height: fit-content;
+          }
           input {
             font-size: 1.2rem;
-            text-align: right;
             width: 10rem;
+            padding: 0.5rem;
             border: none;
           }
           div {
@@ -141,10 +160,11 @@
     }
   }
 }
-//add mixins
+
 @media screen and (max-width: 768px) {
+  .pageContentContainer {
   .mainBlocksContainer {
-    grid-template-columns: auto;
+    grid-template-columns: 1fr;
 
     .closestWorkouts {
       order: -2;
@@ -152,5 +172,6 @@
     .progressContainer {
       order: -1;
     }
+  }
   }
 }

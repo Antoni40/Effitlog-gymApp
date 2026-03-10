@@ -137,36 +137,41 @@ function Dashboard(){
     const {weightKG, heightCM} = BMIdata;
     console.log(weightKG, heightCM);
     const heightM = heightCM / 100;
-    console.log(heightM)
+    console.log(heightM);
 
-    const BMI = weightKG / (heightM * heightM);
-    
-    BMIContainer.current.classList.remove(
+    let BMI = null;
+    let message = '';
+
+    BMIdiv.current.classList.remove(
       styles.underweight,
       styles.normal,
       styles.overweight,
       styles.obesity
     );
 
-    let message = '';
 
-    if(BMI < 18.5){
-      BMIContainer.current.classList.add(styles.underweight);
-      message += "Underweight: ";
-    } else if(BMI >= 18.5 && BMI < 25) {
-      BMIContainer.current.classList.add(styles.normal);
-      message += "Normal weight: ";
-    } else if(BMI >= 25 && BMI < 30){
-      BMIContainer.current.classList.add(styles.overweight);
-      message += "Overweight: ";
+    if(weightKG && heightCM && heightCM > 0){
+      BMI = weightKG / (heightM * heightM);
+    
+      if(BMI < 18.5){
+        BMIdiv.current.classList.add(styles.underweight);
+        message += "Underweight: ";
+      } else if(BMI >= 18.5 && BMI < 25) {
+        BMIdiv.current.classList.add(styles.normal);
+        message += "Normal weight: ";
+      } else if(BMI >= 25 && BMI < 30){
+        BMIdiv.current.classList.add(styles.overweight);
+        message += "Overweight: ";
+      } else if (BMI >=30) {
+        BMIdiv.current.classList.add(styles.obesity);
+        message += `Obesity class  ${(BMI < 35) ? "I: " : (BMI < 40) ? "II: " : "III: "}`;
+      }
+
+      message += BMI.toFixed(2);
     } else {
-      BMIContainer.current.classList.add(styles.obesity);
-      message += `Obesity class ${(BMI < 35) ? 'I' : (BMI < 40) ? 'II' : 'III'}`;
+      message = 'provide data';
     }
-
-    message += BMI.toFixed(2);
     BMIdiv.current.innerText = message;
-   
   }
 
   return(
@@ -244,12 +249,12 @@ function Dashboard(){
                       </div>
 
                       <button>Show BMI</button>
+                      </form>
 
                       <div ref={BMIdiv}>
 
                       </div>
                       
-                    </form>
                   </div>
                   </div>
               </section>

@@ -5,81 +5,134 @@
 .workoutListContainer {
   display: flex;
   flex-direction: column;
-  align-items: center;      
-        form { 
-          width: fit-content;
-          ul {
-            list-style-type: none;
-            font-size: 1.5rem;
+  align-items: center;
 
-            .exerciseContainer {
-              display: flex;
-              gap: 0.5rem;
-              align-items: center;
-              background-color: v.$medium-grey;
-              color: white;
-              margin: 1rem 0.5rem;
-              border-radius: 0.5rem;
-              padding: 10px;
-              text-align: left;
-              max-width: 1000px;
+  .innerWorkoutListContainer {
+    max-width: 800px;  
+    h1 {
+      margin: 2rem 0;
+    }
+      form { 
+        width: fit-content;
+        ul {
+          list-style-type: none;
+          font-size: 1.5rem;
 
-              .bodyIcon {
-                height: 6rem;
-              }
+          .exerciseContainer {
+            display: flex;
+            align-items: center;
+            background-color: v.$medium-grey;
+            color: white;
+            margin: 1rem 0.5rem;
+            border-radius: 1rem;
+            padding: 1rem;
+            text-align: left;
 
-              .textCheckboxContainer {
-                display: flex;
-                align-items: center;
-                div, label {
-                  margin-left: 10px;
-                }
-                div {
-                  width: 25rem;
-                }
-                input[type="checkbox"] {
-                  appearance: none;
-                  margin-right: 2rem;
-                  width: 1.5rem;
-                  height: 1.5rem;
-                  border: 2px solid v.$light-grey;
-                  border-radius: 4px;
-                  cursor: pointer;
-                  position: relative;
-                  transition: all 0.2s ease-in-out;
+            .bodyIcon {
+              height: 6rem;
 
-                  &:hover {
-                    border-color: v.$white-color;
-                  }
-
-                  &:checked {
-                    background-color: v.$light-blue;
-                    border-color: v.$light-blue;
-
-                    &::after {
-                      content: '\2714';
-                      position: absolute;
-                      left: 0;
-                      top: -0.4rem;
-                      height: 1rem;
-                    }
-                  }
-                }
-              }
             }
-            input {
-              font-size: 1.5rem;
-              width: 10rem;
-              border: none;
-              text-align: right;
+
+            .textCheckboxContainer {
+              margin-left: 2rem;
+              display: grid;
+              grid-template-columns: 3fr 1fr 1fr;
+              gap: 1rem;
+              align-items: center;
+              .textLine {
+                display: block;
+              }
+              .quantity {
+                font-size: 1rem;
+                color: v.$white-color;
+              }
+              .exerciseActions {
+                display: flex;
+                justify-content: center;
+                input {
+                  width: 5rem;
+                  text-align: center;
+                }
+              }
+              .checkboxContainer {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
+              input[type="checkbox"] {
+                appearance: none;
+                width: 1.5rem;
+                height: 1.5rem;
+                border: 2px solid v.$light-grey;
+                border-radius: 4px;
+                cursor: pointer;
+                position: relative; 
+                transition: all 0.2s ease-in-out;
+
+                &:hover {
+                  border-color: v.$white-color;
+                }
+
+                &:checked {
+                  background-color: v.$light-blue;
+                  border-color: v.$light-blue;
+
+                  &::after {
+                    content: '\2714';
+                    position: absolute;
+                    left: 0;
+                    top: -0.4rem;
+                    height: 1rem;
+                  }
+                }
+              }
             }
           }
-            button {
-              width: 100%;
-              margin: 0.5rem 0;
-            }
+          input {
+            font-size: 1.5rem;
+            width: 10rem;
+            border: none;
+          }
         }
+          button {
+            width: 100%;
+            margin-top: 1rem;
+          }
+      }
 
 }
+}
+
+.progressBarContainer {
+  max-width: 800px;
+  margin: 2rem auto;
+  position: sticky;
+  top: 4rem;
+  z-index: 1000;
+
+  .progressBar {
+    background-color: v.$white-color;
+    border-radius: 1rem;
+    width: 100%;
+    height: 100%;
+    height: 1.5rem;
+    overflow: hidden;
+    
+    .barFilling {
+      height: 100%;
+      border-radius: 1rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;  
+      transition: width 0.3s ease-in-out;
+    
+      .percentIndicator {
+        margin-right: 1rem;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
 
 

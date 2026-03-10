@@ -153,53 +153,54 @@ function WorkoutExecution(){
       </div>
       
       <div className={styles.workoutListContainer}>
-
-        <h1>{workoutData.workout_title}</h1>
-          <form onSubmit={(e) => {handleSubmit(e)}}>
-            <ul>
-              {workoutExercises.map((exercise) => {
-                return (
-                  
-                  <li key={exercise.exercise_order} className={styles.exerciseContainer}>
+        <div className={styles.innerWorkoutListContainer}> 
+          <h1>{workoutData.workout_title}</h1>
+            <form onSubmit={(e) => {handleSubmit(e)}}>
+              <ul>
+                {workoutExercises.map((exercise) => {
+                  return (
                     
-                    {Object.entries(iconsUpperBody).map(([key, value]) => {
-                      if(exercise.exercise_muscle_group === key){
-                        return <img src={value} alt={key} className={styles.bodyIcon}/>
-                      }
-                    })}
-                    {Object.entries(iconsLowerBody).map(([key, value]) => {
-                      if(exercise.exercise_muscle_group === key){
-                        return <img src={value} alt={key} className={styles.bodyIcon}/>
-                      }
-                    })}
-
-                    <div className={styles.textCheckboxContainer}>
-                      <div>
-                        <div className={styles.exerciseInfo}>
-                          <span className={styles.textLine}>{exercise.exercise_order}. {exercise.exercise_name}: </span> 
-                          <span>{exercise.reps} reps x </span><span>{exercise.sets} sets</span>
-                        </div> 
+                    <li key={exercise.exercise_order} className={styles.exerciseContainer}>
                       
-                        <div className={styles.exerciseActions}>
-                          <input type="number" placeholder="Enter weight"
-                          name={`load_${exercise.exercise_order}`}
-                          id={`${exercise.exercise_order}`}
-                          onChange={(e) => updateExercise(e)}
-                          />&nbsp;kg
-                        </div> 
+                      {Object.entries(iconsUpperBody).map(([key, value]) => {
+                        if(exercise.exercise_muscle_group === key){
+                          return <img src={value} alt={key} className={styles.bodyIcon}/>
+                        }
+                      })}
+                      {Object.entries(iconsLowerBody).map(([key, value]) => {
+                        if(exercise.exercise_muscle_group === key){
+                          return <img src={value} alt={key} className={styles.bodyIcon}/>
+                        }
+                      })}
+
+                      <div className={styles.textCheckboxContainer}>
+                          <div className={styles.exerciseInfo}>
+                            <span className={styles.textLine}>{exercise.exercise_order}. {exercise.exercise_name}</span> 
+                            <span className={styles.quantity}>{exercise.reps} reps x {exercise.sets} sets</span>
+                          </div> 
+                        
+                          <div className={styles.exerciseActions}>
+                            <input type="number"
+                            name={`load_${exercise.exercise_order}`}
+                            id={`${exercise.exercise_order}`}
+                            onChange={(e) => updateExercise(e)}
+                            />&nbsp;kg
+                          </div> 
+                        
+                        <div className={styles.checkboxContainer}>
+                          <input type="checkbox" name={`done_${exercise.exercise_order}`} 
+                          onChange={(e) => {updateExercise(e)}}
+                          id={`${exercise.exercise_order}`}/>
+                        </div>
+                      
                       </div>
-                    
-                      <input type="checkbox" name={`done_${exercise.exercise_order}`} 
-                      onChange={(e) => {updateExercise(e)}}
-                      id={`${exercise.exercise_order}`}/>
-                    
-                    </div>
-                  </li>
-                )})
-              }
-            </ul>
-            <button>Finish</button>
-          </form>
+                    </li>
+                  )})
+                }
+              </ul>
+              <button>Finish</button>
+            </form>
+        </div>
       </div>
     </>
   );
