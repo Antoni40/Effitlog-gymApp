@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import styles from '../scss/Dashboard.module.scss';
 import { useNavigate, Link } from 'react-router-dom';
 import BarChart from './BarChart.jsx';
@@ -14,6 +14,12 @@ function Dashboard(){
   const [name, setName] = useState("");
   const [workouts, setWorkouts] = useState([]);
   const [workoutsResults, setWorkoutsResults] = useState([]);
+  const [BMIdata, setBMIdata] = useState({
+    heightCM: '',
+    weightKG: ''
+  });
+  const BMIdiv = useRef(null);
+  const BMIContainer = useRef(null);
 
   const labels = workoutsResults.map((el) => el.workout_date);
   const total_weights = workoutsResults.map((el) => el.workout_weight);
@@ -126,6 +132,43 @@ function Dashboard(){
     }
   }
 
+  function showBMIResults(e){
+    e.preventDefault();
+    const {weightKG, heightCM} = BMIdata;
+    console.log(weightKG, heightCM);
+    const heightM = heightCM / 100;
+    console.log(heightM)
+
+    const BMI = weightKG / (heightM * heightM);
+    
+    BMIContainer.current.classList.remove(
+      styles.underweight,
+      styles.normal,
+      styles.overweight,
+      styles.obesity
+    );
+
+    let message = '';
+
+    if(BMI < 18.5){
+      BMIContainer.current.classList.add(styles.underweight);
+      message += "Underweight: ";
+    } else if(BMI >= 18.5 && BMI < 25) {
+      BMIContainer.current.classList.add(styles.normal);
+      message += "Normal weight: ";
+    } else if(BMI >= 25 && BMI < 30){
+      BMIContainer.current.classList.add(styles.overweight);
+      message += "Overweight: ";
+    } else {
+      BMIContainer.current.classList.add(styles.obesity);
+      message += `Obesity class ${(BMI < 35) ? 'I' : (BMI < 40) ? 'II' : 'III'}`;
+    }
+
+    message += BMI.toFixed(2);
+    BMIdiv.current.innerText = message;
+   
+  }
+
   return(
       <div>
             <Navbar links={[{name, onClick: () => {navigate('/dashboard')}},
@@ -155,9 +198,6 @@ function Dashboard(){
                   <Link to={`/workouts/calendar`}>
                     Full calendar <span><FontAwesomeIcon icon={faCalendar} /></span>
                   </Link>
-                  <Link to={`/settings`}>
-                    Progression settings <span><FontAwesomeIcon icon={faGear}/></span>
-                  </Link>
 
                 </div>
               </section>
@@ -166,6 +206,51 @@ function Dashboard(){
                 <h2>Progress</h2>
                   <div className={styles.chartContainer}>
                     <BarChart data={total_weights} labels={labels} data_title={"Total used weight in workouts"} title={"Progress over time"}/>
+                  </div>
+                  <div>
+                  <div ref={BMIContainer} 
+                  className={styles.bmiContainer}>
+                    <h3>BMI</h3>
+                    <form onSubmit={showBMIResults}>
+
+                      <div>
+                        <label htmlFor="weight">Weight</label>
+                        <input type="number" 
+                          name='weightKG'
+                          placeholder='(e.g. 80)'
+                          value={BMIdata.weightKG}
+                          onChange={(e) => {
+                            const name = e.target.name;
+                            const value = e.target.value > 0 ? Number(e.target.value) : '';
+                            setBMIdata((prev) => { 
+                              return {...prev, [name]: value}
+                            })}}
+                          /> kg
+                      </div>
+                      
+                      <div>
+                        <label htmlFor="height">Height</label>
+                        <input type="number" 
+                          name='heightCM'
+                          placeholder='(e.g. 180)'
+                          value={BMIdata.heightCM}
+                          onChange={(e) => {
+                            const name = e.target.name;
+                            const value = e.target.value > 0 ? Number(e.target.value) : '';
+                            setBMIdata((prev) => { 
+                              return {...prev, [name]: value}
+                            })}}
+                          /> cm
+                      </div>
+
+                      <button>Show BMI</button>
+
+                      <div ref={BMIdiv}>
+
+                      </div>
+                      
+                    </form>
+                  </div>
                   </div>
               </section>
 
@@ -177,7 +262,7 @@ function Dashboard(){
                     <ul>
                       {(workouts.length !== 0) ?
                       workouts.map((workout, index) => {
-                        return <li key={index}>
+                        return <li key={workout.user_workout_id}>
                                   <div>
                                     <h3>{index + 1}. {workout.workout_name}</h3>
                                     <p className={styles.subtitle}>

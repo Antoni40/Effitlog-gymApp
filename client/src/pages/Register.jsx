@@ -1,5 +1,5 @@
 import { useNavigate, Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import isPasswordValid from '../utils/isPasswordValid.js'
 import styles from '../scss/AuthForm.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -15,6 +15,11 @@ function Register(){
     password: ""
   });
   const [showPassword, setShowPassword] = useState(false);
+  const firstNameRef = useRef(null);
+
+  useEffect(() => {
+    firstNameRef.current.focus();
+  }, [])
 
   function handleChange(e){
     const { name, value } = e.target;
@@ -75,6 +80,7 @@ function Register(){
               <div>
                 <label htmlFor="name">First Name</label>
                 <input type="text" 
+                  ref={firstNameRef}
                   id="name" 
                   name="first_name"
                   value={registerData.first_name}

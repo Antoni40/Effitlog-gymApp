@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { iconsLowerBody, iconsUpperBody} from "../assets/icons.js"
 import styles from '../scss/WorkoutExecution.module.scss';
 import Navbar from "../components/NavigationBar.jsx";
@@ -12,12 +12,14 @@ function WorkoutExecution(){
   const navigate = useNavigate();
   const [workoutData, setWorkoutData] = useState({});
   const [workoutExercises, setWorkoutExercises] = useState([]);
+  const barFilling = useRef(null);
+  const percentIndicator = useRef(null);
 
   function updateExercise(e){
     const id = Number(e.target.id);
-    const value = e.target.type === 'checkbox' ? e.target.checked : Number(e.target.value);
+    const value = e.target.type === 'checkbox' ? e.target.checked : Number(e.target.value) || '';
     let name = e.target.name.split('_')[0];
-
+    
     setWorkoutExercises((prevExercises) => 
       prevExercises.map(exercise => {
         if(exercise.exercise_order === id) {
@@ -67,12 +69,12 @@ function WorkoutExecution(){
   function handleSubmit(e){
     e.preventDefault();
   
-    let inputsFilled = true;
-    workoutExercises.forEach((exercise => {
-      if(!exercise.done) inputsFilled = false;
+    const isAllInputsFilled = workoutExercises.every((exercise => {
+      if(!exercise.done) return false;
+      else  return true;
     }))
 
-    if(!inputsFilled){
+    if(!isAllInputsFilled){
       alert("You didn't do all exercises.");
     } else {
       alert("You did all exercises, congratulations");
@@ -107,10 +109,30 @@ function WorkoutExecution(){
             navigate('/login');
           }
         }
+      }
+      setWorkoutDone();
     }
-    setWorkoutDone();
   }
-}
+
+  function updateProgressBar(madeCounter, length){
+    const percentOfMade = ((madeCounter / length) * 100).toFixed(0);
+    percentIndicator.current.innerHTML = `${percentOfMade}%`;
+    barFilling.current.style.width = `${percentOfMade}%`;
+    barFilling.current.style.backgroundColor = 'green';
+
+    console.log("Percent of made: " + percentOfMade);
+  }
+
+  useEffect(() => {
+    let madeCounter = 0;
+    for(const exercise of workoutExercises) {
+      if(exercise.done) {
+        madeCounter++;
+      }
+    }
+    console.log(madeCounter);
+    updateProgressBar(madeCounter, workoutExercises.length);
+  }, [workoutExercises])
 
 
   return(
@@ -119,6 +141,16 @@ function WorkoutExecution(){
                       {name: "Previous workout", path: `/workouts/${workoutData.prevWorkoutID}`},
                       {name: "Edit workout", path: `/workouts/${id}/edit`},
                       {name: "Go back to dashboard", path: `/dashboard`}]}/>
+
+      <div className={styles.progressBarContainer}>
+        <div className={styles.progressBar}>
+          <div ref={barFilling} 
+          className={styles.barFilling}>
+              <p ref={percentIndicator} 
+              className={styles.percentIndicator}></p>
+          </div>
+        </div>
+      </div>
       
       <div className={styles.workoutListContainer}>
 
@@ -130,7 +162,6 @@ function WorkoutExecution(){
                   
                   <li key={exercise.exercise_order} className={styles.exerciseContainer}>
                     
-                    {/*Make simpler */}
                     {Object.entries(iconsUpperBody).map(([key, value]) => {
                       if(exercise.exercise_muscle_group === key){
                         return <img src={value} alt={key} className={styles.bodyIcon}/>

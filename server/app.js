@@ -70,7 +70,7 @@ app.get('/auth/refreshToken', async (req, res) => {
         email: user.email
       },
       process.env.JWT_SECRET, {
-        expiresIn: '1m'
+        expiresIn: '15m'
     });
       
     res.cookie('accessToken', accessToken, {
@@ -112,7 +112,7 @@ app.post('/api/checkUserData', async (req, res) => {
       email: user.email
     };
 
-    const accessToken = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '1m' });
+    const accessToken = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '15m' });
     const refreshToken = jwt.sign({id: userData.id}, process.env.JWT_SECRET, { expiresIn: '7d'});
 
     res.cookie('accessToken', accessToken, {

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import styles from '../scss/AuthForm.module.scss';
 import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -14,6 +14,11 @@ function Login(){
   password: ""
   });
   const [showPassword, setShowPassword] = useState(false);
+  const emailRef = useRef(null);
+
+  useEffect(() => {
+    emailRef.current.focus();
+  }, [])
 
   function updateLogin(e){
     const {name, value} = e.target;
@@ -88,7 +93,8 @@ function Login(){
             className={styles.Form}>
 
             <label htmlFor="login">E-mail</label>
-            <input type="email" 
+            <input type="email"
+              ref={emailRef} 
               id="login" 
               name="login" 
               value={loginData.login} 
@@ -103,7 +109,8 @@ function Login(){
                 id="password"
                 name="password"
                 value={loginData.password}
-                onChange={updateLogin}/>
+                onChange={updateLogin}
+                required/>
 
               <button type='button'
                 className={styles.showPasswordToggler}

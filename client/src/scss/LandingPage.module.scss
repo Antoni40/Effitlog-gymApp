@@ -83,11 +83,12 @@
     .mainContent {
       grid-template-columns: 100%;
       grid-template-rows: repeat(2, calc((100vh - 4rem)));
-      img {
-        width: 80%;
-      }
       .appPictureContainer {
         padding-top: 2vh;
+        img {
+          height: 25rem;
+          width: auto;
+        }
       }
     }
   }
