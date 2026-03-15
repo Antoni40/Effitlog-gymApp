@@ -175,8 +175,8 @@ function WorkoutExecution(){
 
                       <div className={styles.textCheckboxContainer}>
                           <div className={styles.exerciseInfo}>
-                            <span className={styles.textLine}>{exercise.exercise_order}. {exercise.exercise_name}</span> 
-                            <span className={styles.quantity}>{exercise.reps} reps x {exercise.sets} sets</span>
+                            <h3 className={styles.textLine}>{exercise.exercise_order}. {exercise.exercise_name}</h3> 
+                            <p className={styles.quantity}>{exercise.reps} reps x {exercise.sets} sets</p>
                           </div> 
                         
                           <div className={styles.exerciseActions}>

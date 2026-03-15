@@ -14,7 +14,6 @@ export default async function fetchHelper(url, options) {
       const isTokenRefreshed = refreshRes.success;
 
       if(!isTokenRefreshed) {
-        alert("Session expired, please log in again");
         throw new Error("unauthorized");
       } else {
         res = await fetch(url, {

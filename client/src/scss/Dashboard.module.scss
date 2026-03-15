@@ -1,177 +1,220 @@
 @use './mixins.scss' as m;
 @use './variables.scss' as v;
 
-
 .greeting {
-  padding-left: 1rem;
-  font-size: 1.5rem;
-  padding-top: 1rem;
+  padding: 1rem 0 0 1rem;
+  h1 {
+    font-size: 2.8rem;
+  }
 }
 
 .pageContentContainer {
-    height: calc(100vh - 4rem);
+  min-height: calc(100vh - 4rem);
+}
 
-  .mainBlocksContainer {
-    margin-top: 20px;
-    display: grid;
-    grid-template-columns: auto auto auto;
-    grid-template-rows: 70vh;
+.mainBlocksContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+  padding: 0 1.25rem;
+}
 
-    .progressContainer {
-      .chartContainer {
-        width: 70%;
-        margin-top: 1rem;
-      }
-      .bmiContainer {
-        border-radius: 1rem;
-        padding: 2rem;
-        font-size: 1.2rem;
-        margin-top: 1rem;
-        display: flex;
-        flex-direction: column;
+.manipulationContainer,
+.progressContainer,
+.closestWorkouts {
+  height: 100%;
+  padding: 2rem;
+  border: 0.1rem solid v.$light-grey;
+  border-radius: 1rem;
+  background-color: v.$grey;
+  text-align: center;
 
-        .underweight{
-          font-weight: bold;
-          width: 100%;
-          background-color: v.$very-light-blue;
-          padding: 0.5rem;
-          border-radius: 1rem;
-        }
-        .normal {
-          font-weight: bold;
-          width: 100%;
-          background-color: v.$light-green;
-          padding: 0.5rem;
-          border-radius: 1rem;
-        }
-        .overweight {
-          font-weight: bold;
-          width: 100%;
-          background-color: v.$light-yellow;
-          padding: 0.5rem;
-          border-radius: 1rem;
-        }
-        .obesity {
-          font-weight: bold;
-          width: 100%;
-          background-color: v.$light-red;
-          padding: 0.5rem;
-          border-radius: 1rem;
-        }
-        h3 {
-          margin-bottom: 1rem;
-          
-        }
-        form {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          label {
-            display: block;
-            text-align: left;
-          }
-          button {
-            height: fit-content;
-          }
-          input {
-            font-size: 1.2rem;
-            width: 10rem;
-            padding: 0.5rem;
-            border: none;
-          }
-          div {
-            margin-bottom: 1rem;
-          }
-        }
-      }
-    }
-    section {
-      text-align: center;
+  h2 {
+    margin-bottom: 1.25rem;
+  }
+}
 
-      .changesButtons {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        button {
-          display: inline-flex;
-          justify-content: space-between;
-        }
-      }
+.manipulationContainer {
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 60%;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    text-align: left;
+    text-decoration: none;
+    font-size: 1.1rem;
+    background-color: v.$light-blue;
+
+    &:hover {
+      background-color: v.$white-color;
+      color: black;
+    }
+  }
+}
+
+.changesButtons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  button {
+    display: inline-flex;
+    justify-content: space-between;
+  }
+}
+
+.progressContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chartContainer {
+  width: 70%;
+  margin-top: 1rem;
+}
+
+.bmiContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  padding: 2rem;
+  border-radius: 1rem;
+  font-size: 1.2rem;
+
+  h3 {
+    margin-bottom: 1rem;
+  }
+
+  form {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    label {
+      display: block;
+      text-align: left;
+      margin: 0;
     }
 
-    .calendarContainer {
-      overflow-y: auto;
-      .subtitle {
-        color: v.$white-color;
-      }
-      ul {
-        list-style-type: none;
-        li {  
-          display: block;
-          background-color: v.$medium-grey;
-          color: white;
-          font-size: 1.1rem;
-          margin: 1rem 0.2rem;
-          border-radius: 0.5rem;
-          padding: 1rem;
-          text-align: left;
-          button {
-            margin-top: 1rem; 
-            padding: 0.5rem;
-          }
-        }
-      }
+    input {
+      width: 10rem;
+      padding: 0.5rem;
+      font-size: 1.2rem;
+      border: none;
     }
-    
-    .manipulationContainer, .progressContainer, .closestWorkouts {
-      background-color: v.$grey;
-      margin: 20px;
-      border-radius: 10px;
-      padding: 20px;
-      border: 1px solid v.$light-grey;
-      height: 100%;
-      h2 {
-        margin-bottom: 20px;
-      }
+
+    button {
+      height: fit-content;
     }
-    .manipulationContainer {
-      a {
-          background-color: v.$light-blue;
-          width: 60%;
-          text-align: left;
-          text-decoration: none;
-          padding: 0.5rem;
-          border-radius: 0.5rem;
-          font-size: 1.1rem;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 1rem;
-      }
-      a:hover {
-        background-color: v.$white-color;
-        color: black;
-      }
+
+    div {
+      margin-bottom: 1rem;
     }
-    .progressContainer {
+    .inputContainer {
       display: flex;
-      flex-direction: column;
       align-items: center;
     }
   }
 }
 
-@media screen and (max-width: 768px) {
-  .pageContentContainer {
-  .mainBlocksContainer {
-    grid-template-columns: 1fr;
+.BMIdiv {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  font-weight: bold;
+}
 
-    .closestWorkouts {
-      order: -2;
-    }
-    .progressContainer {
-      order: -1;
+.underweight {
+  background-color: v.$very-light-blue;
+}
+
+.normal {
+  background-color: v.$light-green;
+}
+
+.overweight {
+  background-color: v.$light-yellow;
+}
+
+.obesity {
+  background-color: v.$light-red;
+}
+
+.calendarContainer {
+  overflow-y: auto;
+
+  .subtitle {
+    color: v.$white-color;
+  }
+
+  ul {
+    list-style-type: none;
+  }
+
+  li {
+    display: block;
+    margin: 1rem 0.2rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-align: left;
+    font-size: 1.1rem;
+    color: white;
+    background-color: v.$medium-grey;
+
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem;
     }
   }
+}
+
+@media screen and (max-width: 1024px) {
+  .mainBlocksContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .manipulationContainer a {
+    width: 90%;
+  }
+
+  .chartContainer {
+    width: 100%;
+  }
+  .bmiContainer form {
+    flex-direction: column;
+    button{
+      width: 100%;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .mainBlocksContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .closestWorkouts {
+    order: -2;
+  }
+
+  .progressContainer {
+    order: -1;
+  }
+
+  .chartContainer {
+    width: 100%;
+  }
+
+  .bmiContainer form input {
+    width: 100%;
+  }
+
+  .calendarContainer {
+    overflow-y: visible;
   }
 }

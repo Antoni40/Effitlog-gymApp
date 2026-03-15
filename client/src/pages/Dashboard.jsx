@@ -48,6 +48,7 @@ function Dashboard(){
     getName();
   }, []);
 
+
   useEffect(() => {
 
     async function getWorkoutsResults(){
@@ -220,38 +221,42 @@ function Dashboard(){
 
                       <div>
                         <label htmlFor="weight">Weight</label>
-                        <input type="number" 
-                          name='weightKG'
-                          placeholder='(e.g. 80)'
-                          value={BMIdata.weightKG}
-                          onChange={(e) => {
-                            const name = e.target.name;
-                            const value = e.target.value > 0 ? Number(e.target.value) : '';
-                            setBMIdata((prev) => { 
-                              return {...prev, [name]: value}
-                            })}}
-                          /> kg
+                        <div className={styles.inputContainer}>
+                          <input type="number" 
+                            name='weightKG'
+                            placeholder='(e.g. 80)'
+                            value={BMIdata.weightKG}
+                            onChange={(e) => {
+                              const name = e.target.name;
+                              const value = e.target.value > 0 ? Number(e.target.value) : '';
+                              setBMIdata((prev) => { 
+                                return {...prev, [name]: value}
+                              })}}
+                            /> kg
+                        </div>
                       </div>
                       
                       <div>
                         <label htmlFor="height">Height</label>
-                        <input type="number" 
-                          name='heightCM'
-                          placeholder='(e.g. 180)'
-                          value={BMIdata.heightCM}
-                          onChange={(e) => {
-                            const name = e.target.name;
-                            const value = e.target.value > 0 ? Number(e.target.value) : '';
-                            setBMIdata((prev) => { 
-                              return {...prev, [name]: value}
-                            })}}
-                          /> cm
+                        <div className={styles.inputContainer}>
+                          <input type="number" 
+                            name='heightCM'
+                            placeholder='(e.g. 180)'
+                            value={BMIdata.heightCM}
+                            onChange={(e) => {
+                              const name = e.target.name;
+                              const value = e.target.value > 0 ? Number(e.target.value) : '';
+                              setBMIdata((prev) => { 
+                                return {...prev, [name]: value}
+                              })}}
+                            /> cm
+                          </div>
                       </div>
 
                       <button>Show BMI</button>
                       </form>
 
-                      <div ref={BMIdiv}>
+                      <div ref={BMIdiv} className={styles.BMIdiv}>
 
                       </div>
                       
@@ -275,7 +280,7 @@ function Dashboard(){
                                     </p>
                                   </div>
                                   <div>
-                                    <button onClick={() => {navigate(`/workouts/${workout.user_workout_id}`)}}>Full workout view/Start workout</button>
+                                    <button onClick={() => {navigate(`/workouts/${workout.user_workout_id}`)}}>Start workout</button>
                                   </div>
                                 </li>
                       }) : <p>No workouts available add new workout</p>}

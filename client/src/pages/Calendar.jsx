@@ -71,7 +71,7 @@ function Calendar(){
                 className={styles.modifyWorkoutBtn}>Modify Workout</button>
 
                 <button onClick={() => {navigate(`/workouts/${workout.user_workout_id}`)}}
-                className={styles.modifyWorkoutBtn}>Full workout view/Start workout</button>
+                className={styles.modifyWorkoutBtn}>Start workout</button>
 
                 <button onClick={() => {deleteWorkout(workout.user_workout_id)}}
                 className={styles.deleteWorkoutBtn}>Delete workout</button>

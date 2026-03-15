@@ -9,7 +9,6 @@ const pool = mysql.createPool({
   database: process.env.MYSQL_DATABASE
 }).promise();
 
-//idk if it's needed
 export async function getUsers() {
   const conn = await pool.getConnection();
   try {

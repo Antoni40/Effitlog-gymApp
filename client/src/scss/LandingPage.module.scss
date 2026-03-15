@@ -1,94 +1,134 @@
-  @use './mixins.scss' as m;
-  @use './variables.scss' as v;
+@use './mixins.scss' as m;
+@use './variables.scss' as v;
 
+header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
 
-  header {
-    position: sticky;
-    top: 0;
-    left: 0;
-    z-index: 1000;
+.mainContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 4rem);
+  width: 100%;
+
+  .appTitleContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: v.$dark-blue;
+
+    img {
+      margin-bottom: 1rem;
+      width: 70%;
+    }
+
+    p {
+      font-size: 2rem;
+      opacity: 0.9;
+    }
   }
+
+  .appPictureContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: v.$white-color;
+
+    img {
+      width: 70%;
+      object-fit: contain;
+      box-shadow: rgba(0, 0, 0, 0.15) 0.12rem 0.12rem 0.16rem;
+    }
+  }
+}
+
+.discoverySection {
+  max-width: 62.5rem;
+  margin: 4rem auto;
+  padding: 0 2rem;
+
+  h2 {
+    margin: 1rem 0;
+    font-size: 3rem;
+  }
+
+  p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  a {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    color: white;
+    background-color: v.$light-blue;
+    text-decoration: none;
+    border-radius: 0.3125rem;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: v.$white-color;
+      color: black;
+    }
+  }
+}
+
+
+@media screen and (max-width: 1024px) {
   .mainContent {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    min-height: calc(100vh - 4rem);
-    width: 100%;
-
     .appTitleContainer {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;  
-      background-color: v.$dark-blue;
-      text-align: center;
-
-      img {
-        height: 10rem;
-        margin-bottom: 1rem;
-      }
-
       p {
-        font-size: 2rem;
-        opacity: 0.9;
+        font-size: 1.7rem;
       }
     }
 
     .appPictureContainer {
-      background-color: v.$white-color;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
       img {
-        width: 70%;
-        object-fit: contain;
-        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+        width: 85%;
       }
     }
   }
-    .discoverySection {
-      max-width: 1000px;
-      margin: 4rem auto;
-      padding: 0 2rem;
 
-      h2 {
-        margin: 1rem 0;
-        font-size: 3rem;
-      }
+  .discoverySection {
+    h2 {
+      font-size: 2.5rem;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .mainContent {
+    grid-template-columns: 1fr;
+    grid-template-rows: 50vh;
+
+    .appTitleContainer {
+      padding: 2rem 1rem;
+
       p {
-        font-size: 1.1rem;
-        margin-bottom: 1.5rem;
-      }
-
-      a {
-        display: inline-block;
-        padding: 0.8rem 1.5rem;
-        color: white;
-        background-color: v.$light-blue;
-        text-decoration: none;
-        border-radius: 5px;
-        transition: all 0.2s;
-
-        &:hover {
-          background-color: v.$white-color;
-          color: black
-        } 
+        font-size: 1.5rem;
       }
     }
 
-  @media screen and (max-width: 768px){
-    * {
-      font-size: 0.8rem;
-    }
-    .mainContent {
-      grid-template-columns: 100%;
-      grid-template-rows: repeat(2, calc((100vh - 4rem)));
-      .appPictureContainer {
-        padding-top: 2vh;
-        img {
-          height: 25rem;
-          width: auto;
-        }
+    .appPictureContainer {
+      padding-top: 2vh;
+
+      img {
+        width: 100%;
+        max-width: 25rem;
+        height: auto;
       }
     }
   }
+
+  .discoverySection {
+    h2 {
+      font-size: 2.2rem;
+    }
+  }
+}

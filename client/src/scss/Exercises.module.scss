@@ -4,24 +4,42 @@
 h1 {
   margin: 1%;
 }
+
 .bodyDivideTitle {
-    display: block;
-    margin-top: 2%;
-    margin-left: 1%;
+  display: block;
+  margin-top: 2%;
+  margin-left: 1%;
+  margin: 2rem 0 0 1rem;
 }
+
 .muscleGroupContainer {
   margin-top: 2%;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  row-gap: 20px;
+  row-gap: 1.25rem;
   overflow-y: auto;
+
   .muscleGroup {
     text-align: center;
+
     p {
       text-transform: capitalize;
     }
+
     img {
       height: 8rem;
     }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .muscleGroupContainer {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media screen and (max-width: 786px) {
+  .muscleGroupContainer {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

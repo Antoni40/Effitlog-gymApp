@@ -1,138 +1,190 @@
 @use './mixins' as m;
 @use './variables' as v;
 
-
 .workoutListContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  .innerWorkoutListContainer {
-    max-width: 800px;  
-    h1 {
-      margin: 2rem 0;
-    }
-      form { 
-        width: fit-content;
-        ul {
-          list-style-type: none;
-          font-size: 1.5rem;
-
-          .exerciseContainer {
-            display: flex;
-            align-items: center;
-            background-color: v.$medium-grey;
-            color: white;
-            margin: 1rem 0.5rem;
-            border-radius: 1rem;
-            padding: 1rem;
-            text-align: left;
-
-            .bodyIcon {
-              height: 6rem;
-
-            }
-
-            .textCheckboxContainer {
-              margin-left: 2rem;
-              display: grid;
-              grid-template-columns: 3fr 1fr 1fr;
-              gap: 1rem;
-              align-items: center;
-              .textLine {
-                display: block;
-              }
-              .quantity {
-                font-size: 1rem;
-                color: v.$white-color;
-              }
-              .exerciseActions {
-                display: flex;
-                justify-content: center;
-                input {
-                  width: 5rem;
-                  text-align: center;
-                }
-              }
-              .checkboxContainer {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              }
-              input[type="checkbox"] {
-                appearance: none;
-                width: 1.5rem;
-                height: 1.5rem;
-                border: 2px solid v.$light-grey;
-                border-radius: 4px;
-                cursor: pointer;
-                position: relative; 
-                transition: all 0.2s ease-in-out;
-
-                &:hover {
-                  border-color: v.$white-color;
-                }
-
-                &:checked {
-                  background-color: v.$light-blue;
-                  border-color: v.$light-blue;
-
-                  &::after {
-                    content: '\2714';
-                    position: absolute;
-                    left: 0;
-                    top: -0.4rem;
-                    height: 1rem;
-                  }
-                }
-              }
-            }
-          }
-          input {
-            font-size: 1.5rem;
-            width: 10rem;
-            border: none;
-          }
-        }
-          button {
-            width: 100%;
-            margin-top: 1rem;
-          }
-      }
-
-}
 }
 
-.progressBarContainer {
-  max-width: 800px;
-  margin: 2rem auto;
-  position: sticky;
-  top: 4rem;
-  z-index: 1000;
+.innerWorkoutListContainer {
+  max-width: 50rem;
 
-  .progressBar {
-    background-color: v.$white-color;
+  h1 {
+    margin: 2rem 0;
+  }
+
+  form {
+    width: fit-content;
+  }
+
+  ul {
+    list-style-type: none;
+    font-size: 1.5rem;
+  }
+
+  .exerciseContainer {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0.5rem;
+    padding: 1rem;
     border-radius: 1rem;
-    width: 100%;
-    height: 100%;
+    text-align: left;
+    color: white;
+    background-color: v.$medium-grey;
+  }
+
+  .bodyIcon {
+    height: 8rem;
+  }
+
+  .textCheckboxContainer {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr;
+    gap: 1rem;
+    align-items: center;
+    margin-left: 2rem;
+  }
+
+  .textLine {
+    display: block;
+  }
+
+  .quantity {
+    font-size: 1rem;
+    color: v.$white-color;
+  }
+
+  .exerciseActions {
+    display: flex;
+    justify-content: center;
+
+    input {
+      width: 5rem;
+      text-align: center;
+    }
+  }
+
+  .checkboxContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  input[type='checkbox'] {
+    position: relative;
+    width: 1.5rem;
     height: 1.5rem;
-    overflow: hidden;
-    
-    .barFilling {
-      height: 100%;
-      border-radius: 1rem;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;  
-      transition: width 0.3s ease-in-out;
-    
-      .percentIndicator {
-        margin-right: 1rem;
-        font-weight: bold;
+    appearance: none;
+    border: 0.125rem solid v.$light-grey;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      border-color: v.$white-color;
+    }
+
+    &:checked {
+      border-color: v.$light-blue;
+      background-color: v.$light-blue;
+
+      &::after {
+        content: '\2714';
+        position: absolute;
+        left: 0;
+        top: -0.4rem;
+        height: 1rem;
       }
     }
   }
+
+  ul input {
+    width: 10rem;
+    font-size: 1.5rem;
+    border: none;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 1rem;
+  }
 }
 
+.progressBarContainer {
+  position: sticky;
+  top: 4rem;
+  z-index: 1000;
+  max-width: 50rem;
+  margin: 2rem auto;
 
+  .progressBar {
+    width: 100%;
+    height: 1.5rem;
+    overflow: hidden;
+    border-radius: 1rem;
+    background-color: v.$white-color;
+  }
 
+  .barFilling {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    border-radius: 1rem;
+    transition: width 0.3s ease-in-out;
+  }
+
+  .percentIndicator {
+    margin-right: 1rem;
+    font-weight: bold;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .innerWorkoutListContainer,
+  .progressBarContainer {
+    width: 90%;
+    max-width: 100%;
+  }
+
+  .innerWorkoutListContainer form {
+    width: 100%;
+  }
+
+  .textCheckboxContainer {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 786px) {
+  .exerciseContainer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .innerWorkoutListContainer .bodyIcon {
+    margin-bottom: 1rem;
+    height: 10rem;
+  }
+
+  .textCheckboxContainer {
+    width: 100%;
+    margin-left: 0;
+    grid-template-columns: 1fr;
+  }
+
+  .exerciseActions,
+  .checkboxContainer {
+    justify-content: flex-start;
+  }
+
+  .innerWorkoutListContainer ul input {
+    width: 100%;
+    max-width: 10rem;
+  }
+
+  .progressBarContainer {
+    width: 90%;
+  }
+}

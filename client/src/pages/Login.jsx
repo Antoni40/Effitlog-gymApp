@@ -65,10 +65,15 @@ function Login(){
         body: JSON.stringify({ email: loginData.login, password: loginData.password}),
       })
 
-        if(!res.ok){
-          throw new Error("HTTP error: " + res.status);
-        }
         const res_data = await res.json();
+
+        if(!res.ok){
+          if(res_data.message === "Invalid login data"){
+            throw new Error(res_data.message)
+          } else {
+            throw new Error("HTTP error: " + res.status);
+          }
+        }
 
         if(!res_data.success){
           throw new Error("Internal server error");
@@ -88,9 +93,9 @@ function Login(){
         <h1>Sign-in</h1>
         <p>Welcome back! Please enter your details.</p>
 
-        <div className={styles.FormContainer}>
+        <div className={styles.formContainer}>
           <form onSubmit={(e) => {handleLogin(e)}} 
-            className={styles.Form}>
+            className={styles.form}>
 
             <label htmlFor="login">E-mail</label>
             <input type="email"

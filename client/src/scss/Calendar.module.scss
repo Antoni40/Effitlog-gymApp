@@ -1,45 +1,82 @@
 @use './mixins.scss' as m;
 @use './variables.scss' as v;
 
-
 .calendarContainer {
-  margin: 0 auto;
-  margin-top: 2vh;
+  margin: 2vh auto 0;
   max-width: 1000px;
-  .workoutsGrid {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows:  1fr;
-    list-style-type: none;
-    .calendarPosition:hover {
-      background-color: v.$medium-grey;
+}
+
+.workoutsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  list-style-type: none;
+}
+
+.calendarPosition {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0.3rem;
+  padding: 1.2rem;
+  border: 1px solid black;
+  border-radius: 1rem;
+  background-color: v.$grey;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: v.$medium-grey;
+  }
+
+  .actionsContainer {
+    display: flex;
+    align-items: flex-start;
+
+    button {
+      width: fit-content;
+      margin: 0;
+      margin-right: 2rem;
     }
-    .calendarPosition {
-    background-color: v.$grey;
-    margin: 5px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid black;
-    transition: background-color 0.3s;
-    .actionsContainer {
-      display: flex;
-      align-items: flex-start;
-      button {
-        margin: 0;
-        width: fit-content;
-        margin-right: 2rem;
-      }
-      .deleteWorkoutBtn {
-        background-color: rgba(255, 0, 0, 0.1);
-        transition: background-color 0.2s;
-      }
-      .deleteWorkoutBtn:hover {
+
+    .deleteWorkoutBtn {
+      background-color: rgba(255, 0, 0, 0.1);
+      transition: background-color 0.2s ease-in-out;
+
+      &:hover {
         background-color: v.$light-red;
         color: white;
       }
     }
-    }
+  }
+}
+
+/* tablet */
+@media screen and (max-width: 64rem) {
+  .calendarPosition {
+    grid-template-columns: 1fr;
+  }
+
+  .calendarPosition .actionsContainer {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .calendarPosition .actionsContainer button {
+    margin-right: 0;
+  }
+}
+
+/* mobile */
+@media screen and (max-width: 48rem) {
+  .calendarPosition {
+    padding: 1rem;
+  }
+
+  .calendarPosition .actionsContainer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .calendarPosition .actionsContainer button {
+    width: 100%;
   }
 }

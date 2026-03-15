@@ -4,54 +4,55 @@
 .navHeader {
   position: sticky;
   top: 0;
+}
 
-  .navContainer {
-    .mainNavigation {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: v.$black;
-      height: 4rem;
-      font-size: 1.3rem;
-      padding: 0 2rem;
-      color: v.$white-color;
+.navContainer {
+  .mainNavigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4rem;
+    padding: 0 2rem;
+    font-size: 1.3rem;
+    color: v.$white-color;
+    background-color: v.$black;
+  }
+}
 
-      .logoContainer {
-        a {
-          text-decoration: none;
-          font-weight: bold;
-        }
-      }
+.logoContainer a {
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
 
-      .buttonsContainer {
-        display: flex;
-        align-items: center;
-        gap: 1rem; 
+.buttonsContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 
-        a, button  {
-          background-color: inherit;
-          font-size: 1.3rem;
-          color: inherit;
-          font-weight: bold;
-          text-decoration: none;
-          transition: all 0.2s ease-in-out;
-          padding: 0.5rem;
-          
-          &:last-of-type {
-            background-color: v.$white-color;
-            color: v.$black;
-            border: none;
-            border-radius: 0.5rem;
-          }
-          &:last-of-type:hover {
-            background: rgba(255, 255, 255, 0.8);
-          }
+  a, button {
+    padding: 0.5rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: inherit;
+    text-decoration: none;
+    background-color: inherit;
+    transition: all 0.2s ease-in-out;
 
-          &:hover, &:focus {
-            opacity: 0.8;
-          }
-        }
-      }
+    &:hover,
+    &:focus {
+      opacity: 0.8;
+    }
+
+    &:last-of-type {
+      border: none;
+      border-radius: 0.5rem;
+      color: v.$black;
+      background-color: v.$white-color;
+    }
+
+    &:last-of-type:hover {
+      background: rgba(255, 255, 255, 0.8);
     }
   }
 }

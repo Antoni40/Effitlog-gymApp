@@ -4,124 +4,126 @@
 .contentContainer {
   display: flex;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 2rem 1rem;
 
   h1 {
     font-size: 2.5rem;
-    margin-bottom: 5px;
+    margin-bottom: 0.5rem;
   }
+
   p {
     color: v.$light-grey;
   }
-  .signInContainer {
-    height: fit-content;
-    display: flex;
-    flex-direction: column; 
-    margin-top: 5%;
-    border-radius: 15px;
-    width: 25%;
+}
+
+.signInContainer {
+  display: flex;
+  flex-direction: column; 
+  text-align: center;
+  width: 100%;
+  max-width: 450px;
+  margin-top: 5%;
+  border-radius: 15px;
+
+  label {
+    text-align: left;
+  }
+
+  a {
     text-align: center;
-    label {
-      text-align: left;
-    }
+    color: #c0c0c0;
+    margin-top: 1rem;
 
-    a {
-      text-align: center;
-      color: #c0c0c0;
-      margin-top: 3%;
+  }
 
-    }
+  .formContainer {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
 
-    .FormContainer {
-      margin-top: 5%;
+    .form {
       display: flex;
-      align-items: center;
-      margin-bottom: 10px;
+      flex-direction: column;
+      width: 100%;
 
-      .Form {
+      .namesContainer {
         display: flex;
-        flex-direction: column;
+        gap: 20px;
+        margin: 5px 0;
+        margin-bottom: 15px;
+      }
+
+      label, input, button {
+        display: block;
+        margin: 0.3rem 0;
+        border-radius: 0.5rem;
+        font-size: 1.2rem;
         width: 100%;
+        padding: 0.4rem;
+      }
+      .passwordInputContainer {
+        position: relative;
+      }
 
-        .namesContainer {
-          display: flex;
-          gap: 20px;
-          margin: 5px 0;
-          margin-bottom: 15px;
-        }
+      label:nth-of-type(2n) {
+        margin-top: 1rem;
+      }
 
-        label, input, button {
-          display: block;
-          margin: 5px 0;
-          border-radius: 8px;
-          font-size: 1.2rem;
-          width: 100%;
-          padding: 0.4rem;
-        }
-        .passwordInputContainer {
-          position: relative;
-        }
-
-        label:nth-of-type(2n) {
-          margin-top: 15px;
-        }
-
-        .showPasswordToggler {
-          position: absolute;
-          top: 0;
-          padding: 0.5rem;
-          font-size: 1.2rem;
-          right: 0;
-          margin: 0.3rem 0;
-          cursor: pointer;
-          width: fit-content;
-          background-color: transparent;
-        }
-
-        button {
-          margin-top: 8%;
-          background-color: v.$light-blue;
-          color: white;
-          text-align: center;
-          padding: 8px 0;
-          font-weight: bold;
-        }
-
-        button:hover {
+      .showPasswordToggler {
+        position: absolute;
+        top: 0;
+        padding: 0.5rem;
+        font-size: 1.2rem;
+        right: 0;
+        margin: 0.3rem 0;
+        cursor: pointer;
+        width: fit-content;
+        background-color: transparent;
+        transition: all 0.2s ease-in-out;
+        
+        &:hover{
           background-color: v.$white-color;
           color: black;
         }
+      }
 
-        input {
-          border: 1px solid black;
+      button {
+        margin-top: 2rem;
+        background-color: v.$light-blue;
+        color: white;
+        text-align: center;
+        padding: 0.5rem 0;
+        font-weight: bold;
+        cursor: pointer;
+
+        &:hover{
+          background-color: v.$white-color;
+          color: black;
         }
+      }
+
+      input {
+        border: 1px solid black;
       }
     }
   }
 }
+
+@media screen and (max-width: 1024px) {
+  .signInContainer {
+    width: 50%;
+  }
+}
+
 @media screen and (max-width: 768px) {
-  .contentContainer {
-    .signInContainer {
-      width: 80%;
-      margin: 5% auto;
-      .FormContainer {
-        .Form {
-          .namesContainer {
-            display: block;
-            margin: 0;
-            div {
-              padding-bottom: 5px;
-              input {
-                margin-top: 10px;
-                margin-bottom: 0;
-              }
-            }
-          }
-            label {
-              margin-top: 15px;
-            }
-        }
-      }
-    }
+  .signInContainer {
+    width: 70%;
+  }
+
+  .form .namesContainer {
+    flex-direction: column;
+    gap: 0;
   }
 }

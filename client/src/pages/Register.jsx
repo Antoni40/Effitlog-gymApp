@@ -71,10 +71,10 @@ function Register(){
       <div className={styles.signInContainer}>
         <h1>Sign-up</h1>
         <p>Create an account to get started.</p>
-        <div className={styles.FormContainer}>
+        <div className={styles.formContainer}>
           <form method='POST'
             onSubmit={handleSubmit}
-            className={styles.Form}>
+            className={styles.form}>
             <div className={styles.namesContainer}>
 
               <div>
