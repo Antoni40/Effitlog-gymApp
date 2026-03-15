@@ -31,11 +31,11 @@ function Register(){
 
   async function handleSubmit(e){
     e.preventDefault();
-
+    
     if(!isPasswordValid(registerData.password)){
       alert(`The password doesn't meet requirements: 
-      min. 8 characters, min. 1 digit, min. 1 symbol, 
-      min. 1 upper case letter, min. 1 lower case letter`);
+min. 8 characters, min. 1 digit, min. 1 symbol, 
+min. 1 upper case letter, min. 1 lower case letter`);
       
       return;
     }

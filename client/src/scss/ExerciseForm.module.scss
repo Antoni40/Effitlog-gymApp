@@ -9,7 +9,7 @@
 
 .formContainer {
   width: 100%;
-  max-width: 30rem;
+  max-width: 35rem;
   margin-top: 2rem;
   padding: 2.5rem;
   border-radius: 1.25rem;
@@ -48,6 +48,10 @@
     text-align: left;
   }
 
+  button:hover {
+    background-color: v.$white-color;
+  }
+
   .workoutCountSection {
     button {
       margin: 1rem 1rem 1rem 0;
@@ -55,12 +59,18 @@
 
     .addExerciseBtn {
       background: v.$light-green;
+      &:hover {
+        background-color: v.$white-color;
+      }
     }
 
     .removeExerciseBtn {
       background: v.$light-red;
+      &:hover {
+        background-color: v.$white-color;
+      }
     }
-  }
+    }
 
 }
 

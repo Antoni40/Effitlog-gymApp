@@ -23,10 +23,6 @@
   background-color: v.$grey;
   transition: background-color 0.3s;
 
-  &:hover {
-    background-color: v.$medium-grey;
-  }
-
   .actionsContainer {
     display: flex;
     align-items: flex-start;

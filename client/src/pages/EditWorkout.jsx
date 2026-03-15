@@ -191,6 +191,7 @@ function EditWorkout(){
 
           <div className={styles.workoutCountSection}>
             <button
+              type="button"
               className={styles.addExerciseBtn}
               onClick={() => {setWorkoutRows((prev) => [...prev, 
                 {exercise_id: 0, sets: 0, reps: 0, exercise_order: prev.length}
@@ -199,6 +200,7 @@ function EditWorkout(){
             </button>
 
             <button
+              type="button"
               className={styles.removeExerciseBtn}
               onClick={() => {setWorkoutRows((prev) => prev.slice(0, -1))}}>
                 - Remove exercise

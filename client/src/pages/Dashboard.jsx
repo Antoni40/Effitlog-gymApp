@@ -211,7 +211,7 @@ function Dashboard(){
               <section className={styles.progressContainer}>
                 <h2>Progress</h2>
                   <div className={styles.chartContainer}>
-                    <BarChart data={total_weights} labels={labels} data_title={"Total used weight in workouts"} title={"Progress over time"}/>
+                    <BarChart data={total_weights.slice(-4)} labels={labels.slice(-4)} data_title={"Total used weight in workouts"} title={"Progress over time"}/>
                   </div>
                   <div>
                   <div ref={BMIContainer} 

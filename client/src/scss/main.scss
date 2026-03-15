@@ -6,6 +6,10 @@
   padding: 0;
   box-sizing: border-box;
   font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+}
+input:focus, select:focus {
+  box-shadow: white 0px 0px 3px;
 }
 
 a {
@@ -33,6 +37,9 @@ img {
 
 header {
   overflow: visible;
+}
+button {
+  transition: all 0.2s ease-in-out;
 }
 
 input, select {
