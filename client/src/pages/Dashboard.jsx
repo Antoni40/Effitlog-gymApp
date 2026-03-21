@@ -191,10 +191,10 @@ function Dashboard(){
               <section className={styles.manipulationContainer}>
                 <h2>Managing options</h2>            
                 <div className={styles.changesButtons}>
-
-                  <Link to={`/workouts/${tempUpdateURL}/edit`}>
+                  
+                  <Link to={tempUpdateURL ? `/workouts/${tempUpdateURL}/edit` : `/dashboard`}>
                     Modify Workouts <span><FontAwesomeIcon icon={faPencil} /></span>  
-                    </Link>
+                  </Link>
                   <Link to={`/workouts/add`}>
                     Add new Workout <span><FontAwesomeIcon icon={faPlus} /></span>
                   </Link>
