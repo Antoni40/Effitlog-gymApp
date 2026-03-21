@@ -16,6 +16,7 @@ function Register(){
   });
   const [showPassword, setShowPassword] = useState(false);
   const firstNameRef = useRef(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     firstNameRef.current.focus();
@@ -30,13 +31,22 @@ function Register(){
   }
 
   async function handleSubmit(e){
+    setError('');
     e.preventDefault();
     
-    if(!isPasswordValid(registerData.password)){
-      alert(`The password doesn't meet requirements: 
-min. 8 characters, min. 1 digit, min. 1 symbol, 
-min. 1 upper case letter, min. 1 lower case letter`);
-      
+    const areInputFormsFilled = Object.values(registerData).every(value => 
+      value.trim().length > 0);
+
+    if(!areInputFormsFilled) {
+      setError("Fill all fields");
+      return;
+    }
+
+    const passwordValid = isPasswordValid(registerData.password);
+
+    if(!passwordValid) {
+      setError("Password requirements: min 8 chars, 1 digit, 1 symbol, 1 uppercase, 1 lowercase");
+
       return;
     }
 
@@ -120,6 +130,8 @@ min. 1 upper case letter, min. 1 lower case letter`);
                   ><FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
                 </button>
               </div>
+              
+              {error && <p className={styles.error}>{error}</p>}
 
               <button>Sign-up</button>
 

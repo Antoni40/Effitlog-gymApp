@@ -15,6 +15,7 @@ function Login(){
   });
   const [showPassword, setShowPassword] = useState(false);
   const emailRef = useRef(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     emailRef.current.focus();
@@ -54,7 +55,16 @@ function Login(){
   }, []);
   
   async function handleLogin(e){
+    setError('');
     e.preventDefault();
+
+    const areInputFormsFilled = Object.values(loginData).every(value => 
+      value.trim().length > 0);
+
+    if(!areInputFormsFilled) {
+      setError("Fill all fields");
+    }
+    else {
     try{
       const res = await fetch("http://localhost:8080/api/checkUserData", {
         method: "POST",
@@ -85,6 +95,7 @@ function Login(){
       alert(err.message);
     }
   }
+  }
 
 
   return(
@@ -104,7 +115,6 @@ function Login(){
               name="login" 
               value={loginData.login} 
               onChange={updateLogin}
-              required
               />
 
             <label htmlFor="password">Password</label>
@@ -114,15 +124,16 @@ function Login(){
                 id="password"
                 name="password"
                 value={loginData.password}
-                onChange={updateLogin}
-                required/>
+                onChange={updateLogin}/>
 
               <button type='button'
                 className={styles.showPasswordToggler}
                 onClick={() => {setShowPassword(prev => !prev)}}
-                ><FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
+                ><FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
               </button>
             </div>
+
+            {error && <p className={styles.error}>{error}</p>}
 
             <button>Sign-in</button>
           </form>

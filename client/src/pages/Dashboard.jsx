@@ -192,7 +192,12 @@ function Dashboard(){
                 <h2>Managing options</h2>            
                 <div className={styles.changesButtons}>
                   
-                  <Link to={tempUpdateURL ? `/workouts/${tempUpdateURL}/edit` : `/dashboard`}>
+                  <Link to={tempUpdateURL ? `/workouts/${tempUpdateURL}/edit` : `/dashboard`}
+                    onClick={() => {
+                      if(!tempUpdateURL){
+                        alert("No workouts available")
+                      }
+                    }}>
                     Modify Workouts <span><FontAwesomeIcon icon={faPencil} /></span>  
                   </Link>
                   <Link to={`/workouts/add`}>

@@ -26,6 +26,15 @@
   margin-top: 5%;
   border-radius: 15px;
 
+  .error {
+    border: 1px solid v.$light-red;
+    color: v.$white-color;
+    padding: 0.8rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+
   label {
     text-align: left;
   }
