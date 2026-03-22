@@ -5,6 +5,7 @@ import styles from '../scss/AuthForm.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons'
 import '../scss/main.scss';
+import isEmailValid from '../utils/isEmailValid.js';
 
 function Register(){
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ function Register(){
   }, [])
 
   function handleChange(e){
+    setError('');
     const { name, value } = e.target;
     setRegisterData(prev => ({
       ...prev,
@@ -43,10 +45,15 @@ function Register(){
     }
 
     const passwordValid = isPasswordValid(registerData.password);
+    const emailValid = isEmailValid(registerData.email);
+
+    if(!emailValid) {
+      setError("Invalid email format");
+      return;
+    }
 
     if(!passwordValid) {
       setError("Password requirements: min 8 chars, 1 digit, 1 symbol, 1 uppercase, 1 lowercase");
-
       return;
     }
 
@@ -72,7 +79,7 @@ function Register(){
 
     } catch (err) {
         console.error(err);
-        alert(err.message);
+        setError("Something went wrong")
       }
   }
 
@@ -109,7 +116,7 @@ function Register(){
 
               <label htmlFor="email">E-mail</label>
               <input 
-                type="email" 
+                type="text" 
                 id="email" 
                 name="email"
                 value={registerData.email}
@@ -127,7 +134,7 @@ function Register(){
                 <button type='button'
                   className={styles.showPasswordToggler}
                   onClick={() => {setShowPassword(prev => !prev)}}
-                  ><FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
+                  ><FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                 </button>
               </div>
               

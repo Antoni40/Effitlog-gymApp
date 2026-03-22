@@ -60,7 +60,7 @@ function Calendar(){
         {(workouts.length !== 0) ?
           workouts.map((workout, index) => {
 
-            return <li key={index} className={styles.calendarPosition}>
+            return <li key={workout.user_workout_id} className={styles.calendarPosition}>
               <p> 
                 {`${workout.workout_name}`} <br/> 
                 {`${new Date(workout.workout_date).toLocaleDateString()}`}

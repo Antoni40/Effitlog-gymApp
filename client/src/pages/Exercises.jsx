@@ -6,12 +6,12 @@ function Exercises(){
 
   return (
     <>
-      <h1>Exercises</h1>
+      <h1>Muscles groups</h1>
       <h2 className={styles.bodyDivideTitle}>Upper Body</h2>
       <section className={styles.muscleGroupContainer}>
   
         {Object.entries(iconsUpperBody).map(([key, value]) =>
-          <div className={styles.muscleGroup}>
+          <div key={key} className={styles.muscleGroup}>
             <img src={value} alt='img'/>
             <p>{key.split('_').join(' ')}</p>
           </div>
@@ -19,10 +19,10 @@ function Exercises(){
         
       </section>
 
-      <h2 className={styles.bodyDivideTitle}>Upper Body</h2>
+      <h2 className={styles.bodyDivideTitle}>Lower Body</h2>
       <section className={styles.muscleGroupContainer}>
         {Object.entries(iconsLowerBody).map(([key, value]) =>
-          <div className={styles.muscleGroup}>
+          <div key={key} className={styles.muscleGroup}>
             <img src={value} alt='img'/>
             <p>{key.split('_').join(' ')}</p>
           </div>

@@ -12,7 +12,6 @@ function EditWorkout(){
   const [workoutRows, setWorkoutRows] = useState([
     {exercise_id: 0, sets: 0, reps: 0, exercise_order: 0}
   ]); 
-  const [loading, setLoading] = useState([true, true]);
   const [workoutData, setWorkoutData] = useState({
     workout_title: '', workout_date: '', nextWorkoutID: id, prevWorkoutID: id
   });
@@ -36,7 +35,6 @@ function EditWorkout(){
           nextWorkoutID, prevWorkoutID});
 
         setWorkoutRows(exercises);
-        setLoading((prev) => [false, prev[1]]);
 
       } catch(err) {
       console.error(err);
@@ -57,7 +55,6 @@ function EditWorkout(){
             throw new Error("Internal server error");
         } 
         setAvailableExercises(res_data.result);
-        setLoading((prev) => [prev[0], false])
 
       } catch(err) {
         console.error(err);
@@ -114,11 +111,9 @@ function EditWorkout(){
     }
   }
 
-  if(loading[0] === true && loading[1] === true) return <p>Loading...</p>
 
   return(
     <>
-      {/*change next/prev for arrows outside form*/}
       <Navbar links={[
         {name: "Previous workout", path: `/workouts/${workoutData.prevWorkoutID}/edit`},
         {name: "Next workout", path: `/workouts/${workoutData.nextWorkoutID}/edit`},
@@ -194,7 +189,7 @@ function EditWorkout(){
               type="button"
               className={styles.addExerciseBtn}
               onClick={() => {setWorkoutRows((prev) => [...prev, 
-                {exercise_id: 0, sets: 0, reps: 0, exercise_order: prev.length}
+                {exercise_id: 0, sets: 0, reps: 0, exercise_order: prev.length + 1}
               ])}}>
                 + Add exercise
             </button>

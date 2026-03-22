@@ -64,7 +64,7 @@ function Dashboard(){
         workouts_results.forEach((element) => {
           const id = element.user_workout_id;
           const weight = Number(element.used_weight * element.sets * element.reps);
-          const date = new Date(element.workout_date).toLocaleDateString();
+          const date = new Date(element.workout_date);
 
           if(!usedWeightInTrainings[id]){
             usedWeightInTrainings[id] = {
@@ -76,7 +76,13 @@ function Dashboard(){
           usedWeightInTrainings[id].workout_weight += weight;
   
         })
-        const array = Object.values(usedWeightInTrainings)
+        let array = Object.values(usedWeightInTrainings)
+          .sort((a, b) => a.workout_date - b.workout_date);
+        
+        array.forEach((el) => {
+          el.workout_date = el.workout_date.toLocaleDateString();
+        })
+
         setWorkoutsResults(array);
       } catch (err) {
         console.error(err);
@@ -99,7 +105,7 @@ function Dashboard(){
         }
 
         setWorkouts(res_data.workouts);
-        setTempUpdateURL(res_data.workouts[0].user_workout_id);
+        setTempUpdateURL(res_data.workouts[0]?.user_workout_id);
       } catch (err) {
         console.error(err);
 
@@ -136,9 +142,7 @@ function Dashboard(){
   function showBMIResults(e){
     e.preventDefault();
     const {weightKG, heightCM} = BMIdata;
-    console.log(weightKG, heightCM);
     const heightM = heightCM / 100;
-    console.log(heightM);
 
     let BMI = null;
     let message = '';
@@ -183,7 +187,9 @@ function Dashboard(){
 
           <div className={styles.pageContentContainer}>
             <header className={styles.greeting}>
-              <h1>Hello {name}!</h1>
+              <h1>Welcome back, {name}!</h1>
+              <p>Workouts completed: {workoutsResults.length}</p>
+              <p>Last workout: {workoutsResults[workoutsResults.length - 1]?.workout_date}</p>  
             </header>
 
             <div className={styles.mainBlocksContainer}>

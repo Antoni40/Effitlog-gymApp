@@ -29,9 +29,9 @@ function LandingPage(){
           <h2>About</h2>
           <p>Effitlog is a gym tracking app that helps people monitor their progress, achieve their goals, and build better training habits.</p>
 
-          <h2>Exercises</h2>
+          <h2>Muscle Groups</h2>
           <Link to={'/exercises'}>
-            Available exercises
+            See all
           </Link>
 
         </section>

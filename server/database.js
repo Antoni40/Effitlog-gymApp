@@ -12,7 +12,7 @@ const pool = mysql.createPool({
 export async function getUsers() {
   const conn = await pool.getConnection();
   try {
-    const [users] = await conn.query("SELECT id, name, surname, emailFROM users");
+    const [users] = await conn.query("SELECT id, name, surname, email FROM users");
     return users;
   } finally {
   conn.release();
@@ -81,7 +81,7 @@ export async function getWorkouts(userId){
     INNER JOIN users_workouts 
     ON workouts.id = users_workouts.workout_id
     WHERE users_workouts.user_id = ? AND
-    users_workouts.is_completed != true`, [userId]);
+    users_workouts.is_completed != 1`, [userId]);
 
     return result;
   } finally {
@@ -94,15 +94,13 @@ export async function getWorkout(userWorkoutID, userID){
   const conn = await pool.getConnection();
   try {
     const [result] = await conn.query(`
-          SELECT exercises.id AS exercise_id, workouts.name AS workout_name, workouts.id AS workout_id, users_workouts.id AS user_workout_id, workouts.id AS workout_id, workouts.description AS description, exercises_in_workouts.sets AS sets, users_workouts.workout_date AS date,
+          SELECT exercises.id AS exercise_id, workouts.name AS workout_name, workouts.id AS workout_id, users_workouts.id AS user_workout_id, workouts.description AS description, exercises_in_workouts.sets AS sets, users_workouts.workout_date AS date,
           exercises_in_workouts.id AS exercise_in_workout_id, exercises_in_workouts.reps AS reps, exercises_in_workouts.exercise_order AS exercise_order, exercises.name AS exercise_name, exercises.muscle_group AS exercise_muscle_group
           FROM users_workouts 
           INNER JOIN workouts ON users_workouts.workout_id = workouts.id
           INNER JOIN exercises_in_workouts ON workouts.id = exercises_in_workouts.workout_id
           INNER JOIN exercises ON exercises.id = exercises_in_workouts.exercise_id
-          INNER JOIN users ON users.id = users_workouts.user_id
-          WHERE users_workouts.user_id = ? AND users_workouts.id = ? AND is_completed = 0
-          AND users_workouts.is_completed != true
+          WHERE users_workouts.user_id = ? AND users_workouts.id = ? AND users_workouts.is_completed != 1
       `, [userID, userWorkoutID]);
 
     return result;
@@ -115,7 +113,7 @@ export async function getNextWorkoutID(userWorkoutID, userID){
   const conn = await pool.getConnection();
   try {
     const [result] = await conn.query(`SELECT id FROM users_workouts WHERE id > ? AND user_id = ? AND is_completed = 0
-      ORDER BY workout_id ASC LIMIT 1`, [userWorkoutID, userID]);
+      ORDER BY id ASC LIMIT 1`, [userWorkoutID, userID]);
     
     return result[0] ? result[0].id : null;
   } finally {
@@ -127,7 +125,7 @@ export async function getPrevWorkoutID(userWorkoutID, userID){
   const conn = await pool.getConnection();
   try {
     const [result] = await conn.query(`SELECT id FROM users_workouts WHERE id < ? AND user_id = ? AND is_completed = 0 
-      ORDER BY workout_id DESC LIMIT 1`, [userWorkoutID, userID]);
+      ORDER BY id DESC LIMIT 1`, [userWorkoutID, userID]);
 
     return result[0] ? result[0].id : null; 
   } finally {
@@ -152,11 +150,10 @@ export async function setUserWorkoutDone(userID, userWorkoutID, exercises){
       console.log(insertData)
     };
 
-    await conn.query(`UPDATE users_workouts SET is_completed = true WHERE id = ?`, [result[0].id]);
+    await conn.query(`UPDATE users_workouts SET is_completed = 1 WHERE id = ?`, [result[0].id]);
 
     await conn.commit();
-    //there should be different return 
-    return {success: true};
+    return res.status(200).json({success: true});
   } catch(err) {
     await conn.rollback();
     throw err;
@@ -200,7 +197,7 @@ export async function addWorkout(date, workout_title, exercises, user_id){
   }
 }
 
-export async function setWorkoutChanges(workoutID, workout_title, workout_date, workout_exercises, userID) {
+export async function setWorkoutChanges(userWorkoutID, workoutID, workout_title, workout_date, workout_exercises, userID) {
   console.log(workoutID, workout_title, workout_date, workout_exercises, userID)
   const conn = await pool.getConnection();
 
@@ -208,11 +205,11 @@ export async function setWorkoutChanges(workoutID, workout_title, workout_date, 
     await conn.beginTransaction();
     console.log("workoutID:", workoutID);
     
-    await conn.query('UPDATE users_workouts SET workout_date = ?  WHERE user_id = ? AND workout_id = ?',
-       [workout_date, userID, workoutID]);
+    await conn.query('UPDATE users_workouts SET workout_date = ?  WHERE id = ?',
+       [workout_date, userWorkoutID]);
 
     await conn.query('UPDATE users_workouts INNER JOIN workouts ON users_workouts.workout_id = workouts.id SET workouts.name = ? WHERE users_workouts.id = ?', 
-      [workout_title, workoutID]);
+      [workout_title, userWorkoutID]);
     
     await conn.query(`DELETE FROM exercises_in_workouts WHERE workout_id = ?`, [workoutID]);
 
@@ -231,14 +228,12 @@ export async function setWorkoutChanges(workoutID, workout_title, workout_date, 
   }
 }
 
-export async function deleteWorkout(user_workout_id){
+export async function deleteWorkout(user_workout_id, userID){
   const conn = await pool.getConnection();
 
   try{
     await conn.beginTransaction();
-    const [result] = await conn.query(`DELETE FROM users_workouts WHERE id = ?`, [user_workout_id]);
-    console.log(result);
-    await conn.query(`ALTER TABLE users_workouts AUTO_INCREMENT = ?`, result.insertId);
+    const [result] = await conn.query(`DELETE FROM users_workouts WHERE id = ? AND user_id = ?`, [user_workout_id, userID]);
     console.log(result);
     await conn.commit();
     return result;
@@ -253,14 +248,13 @@ export async function deleteWorkout(user_workout_id){
 export async function getWorkoutsResults(userID){
   const conn = await pool.getConnection();
   try{
-    //maybe I should use aliases
     const [results] = await conn.query(`SELECT workouts_results.id AS workout_results_id, workouts_results.user_workout_id,
       workouts_results.exercise_id, 
       workouts_results.sets, workouts_results.reps, workouts_results.used_weight, users_workouts.workout_date
       FROM workouts_results
       INNER JOIN users_workouts ON users_workouts.id = workouts_results.user_workout_id
       WHERE users_workouts.user_id = ?
-      ORDER BY workouts_results.user_workout_id`, [userID]);
+      ORDER BY users_workouts.workout_date`, [userID]);
     return results;
   } finally {
     conn.release();

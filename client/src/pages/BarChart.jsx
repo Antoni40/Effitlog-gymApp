@@ -63,7 +63,7 @@ function BarChart(props) {
       }
   };
 
-  return <Bar key={JSON.stringify(props.data)} data={data} options={options} />;
+  return <Bar data={data} options={options} />;
 }
 
 export default BarChart;

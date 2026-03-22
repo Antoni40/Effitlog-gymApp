@@ -16,13 +16,13 @@ function WorkoutExecution(){
   const percentIndicator = useRef(null);
 
   function updateExercise(e){
-    const id = Number(e.target.id);
+    const order = Number(e.target.id);
     const value = e.target.type === 'checkbox' ? e.target.checked : Number(e.target.value) || '';
     let name = e.target.name.split('_')[0];
     
     setWorkoutExercises((prevExercises) => 
       prevExercises.map(exercise => {
-        if(exercise.exercise_order === id) {
+        if(exercise.exercise_order === order) {
           return {...exercise, [name]: value}
         } else {
           return exercise;
@@ -115,8 +115,11 @@ function WorkoutExecution(){
   }
 
   function updateProgressBar(madeCounter, length){
+    if(length === 0){
+      return;
+    }
     const percentOfMade = ((madeCounter / length) * 100).toFixed(0);
-    percentIndicator.current.innerHTML = `${percentOfMade}%`;
+    percentIndicator.current.textContent = `${percentOfMade}%`;
     barFilling.current.style.width = `${percentOfMade}%`;
     barFilling.current.style.backgroundColor = 'green';
 
@@ -164,12 +167,12 @@ function WorkoutExecution(){
                       
                       {Object.entries(iconsUpperBody).map(([key, value]) => {
                         if(exercise.exercise_muscle_group === key){
-                          return <img src={value} alt={key} className={styles.bodyIcon}/>
+                          return <img key={key} src={value} alt={key} className={styles.bodyIcon}/>
                         }
                       })}
                       {Object.entries(iconsLowerBody).map(([key, value]) => {
                         if(exercise.exercise_muscle_group === key){
-                          return <img src={value} alt={key} className={styles.bodyIcon}/>
+                          return <img key={key} src={value} alt={key} className={styles.bodyIcon}/>
                         }
                       })}
 

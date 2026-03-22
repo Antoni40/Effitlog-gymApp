@@ -154,13 +154,17 @@ function AddWorkout(){
           <div className={styles.workoutCountSection}>
             <button type="button"
             className={styles.addExerciseBtn}
-            onClick={() => {setWorkoutRows((prev) => [...prev, prev.length + 1])}}>
+            onClick={() => {setWorkoutRows((prev) => [...prev, 
+              {exercise_id: '', id: '', sets: '', reps: ''}
+            ])}}>
               + Add exercise
             </button>
 
             <button type="button"
               className={styles.removeExerciseBtn}
-              onClick={() => {setWorkoutRows((prev) => prev.slice(0, -1))}}>
+              onClick={() => {setWorkoutRows((prev) => {
+                return (prev.length > 1) ? prev.slice(0, -1) : prev
+              })}}>
                 - Remove exercise
             </button>
           </div>

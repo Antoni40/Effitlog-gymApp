@@ -22,6 +22,7 @@ function Login(){
   }, [])
 
   function updateLogin(e){
+    setError('');
     const {name, value} = e.target;
     setLoginData((prev) => ({
       ...prev,
@@ -55,7 +56,6 @@ function Login(){
   }, []);
   
   async function handleLogin(e){
-    setError('');
     e.preventDefault();
 
     const areInputFormsFilled = Object.values(loginData).every(value => 
@@ -63,6 +63,7 @@ function Login(){
 
     if(!areInputFormsFilled) {
       setError("Fill all fields");
+      return;
     }
     else {
     try{
@@ -79,7 +80,8 @@ function Login(){
 
         if(!res.ok){
           if(res_data.message === "Invalid login data"){
-            throw new Error(res_data.message)
+            setError('Invalid login data');
+            return;
           } else {
             throw new Error("HTTP error: " + res.status);
           }
@@ -92,7 +94,7 @@ function Login(){
         
     } catch(err) {
       console.error(err);
-      alert(err.message);
+      setError("Something went wrong");
     }
   }
   }
@@ -109,7 +111,7 @@ function Login(){
             className={styles.form}>
 
             <label htmlFor="login">E-mail</label>
-            <input type="email"
+            <input type="text"
               ref={emailRef} 
               id="login" 
               name="login" 
