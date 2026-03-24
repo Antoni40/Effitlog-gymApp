@@ -34,7 +34,7 @@ function Login(){
   useEffect(() => {
     async function isUserLoggedIn() {
       try {
-        const res = await fetch('http://localhost:8080/api/isUserLoggedIn', {
+        const res = await fetch('http://localhost:8080/api/auth/status', {
           method: "GET",
           credentials: 'include'
         })
@@ -67,7 +67,7 @@ function Login(){
     }
     else {
     try{
-      const res = await fetch("http://localhost:8080/api/checkUserData", {
+      const res = await fetch("http://localhost:8080/api/auth/login", {
         method: "POST",
         credentials: 'include',
         headers: {

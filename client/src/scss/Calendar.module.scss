@@ -34,8 +34,14 @@
       margin-right: 2rem;
     }
 
+    .startWorkoutBtn {
+      background-color: v.$light-green;
+      &:hover {
+        background-color: v.$white-color;
+      }
+    }
     .deleteWorkoutBtn {
-      background-color: rgba(255, 0, 0, 0.1);
+      background-color: rgba(255, 0, 0, 0.2);
       transition: background-color 0.2s ease-in-out;
 
       &:hover {

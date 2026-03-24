@@ -98,8 +98,9 @@
 
   form {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     gap: 1rem;
+    margin-bottom: 1.5rem;
 
     label {
       display: block;
@@ -118,9 +119,6 @@
       height: fit-content;
     }
 
-    div {
-      margin-bottom: 1rem;
-    }
     .inputContainer {
       display: flex;
       align-items: center;

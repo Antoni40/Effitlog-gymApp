@@ -23,7 +23,11 @@ function WorkoutExecution(){
     setWorkoutExercises((prevExercises) => 
       prevExercises.map(exercise => {
         if(exercise.exercise_order === order) {
-          return {...exercise, [name]: value}
+          if(name === "load" && value < 0){
+            return {...exercise};
+          } else {
+            return {...exercise, [name]: value}
+          }
         } else {
           return exercise;
         }
@@ -34,7 +38,7 @@ function WorkoutExecution(){
   useEffect(() => {
     async function getWorkout() {
       try {
-      const res_data = await fetchHelper(`http://localhost:8080/api/getWorkout/${id}`, {method: 'GET'});
+      const res_data = await fetchHelper(`http://localhost:8080/api/workout/${id}`, {method: 'GET'});
 
       if(!res_data.success){
         throw new Error("Internal server error")
@@ -81,14 +85,13 @@ function WorkoutExecution(){
 
       async function setWorkoutDone() {
         try {
-          const res_data = await fetchHelper(`http://localhost:8080/api/setWorkoutDone`, {
+          const res_data = await fetchHelper(`http://localhost:8080/api/workout/${id}/complete`, {
             method: "POST",
             headers: { "Content-Type": "application/json"},
             credentials: 'include',
             body: JSON.stringify(
               workoutExercises.map(exercise => ({
-                userWorkoutID: exercise.user_workout_id,
-                exerciseID: exercise.exercise_id,
+                exerciseId: exercise.exercise_id,
                 sets: exercise.sets,
                 reps: exercise.reps,
                 exerciseOrder: exercise.exercise_order,
@@ -187,6 +190,7 @@ function WorkoutExecution(){
                             name={`load_${exercise.exercise_order}`}
                             id={`${exercise.exercise_order}`}
                             onChange={(e) => updateExercise(e)}
+                            value={`${exercise.load}`}
                             />&nbsp;kg
                           </div> 
                         

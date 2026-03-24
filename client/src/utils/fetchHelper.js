@@ -5,7 +5,7 @@ export default async function fetchHelper(url, options) {
     });
 
     if(res.status === 401){
-      let refreshRes = await fetch('http://localhost:8080/auth/refreshToken', {
+      let refreshRes = await fetch('http://localhost:8080/api/auth/refresh_token', {
         method: 'GET',
         credentials: 'include'
       })

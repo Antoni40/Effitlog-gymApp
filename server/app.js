@@ -7,8 +7,8 @@ import {getUser, getUsers, createUser,
         checkUserEmail, getWorkouts, 
         getWorkout, setUserWorkoutDone, getExercises, 
         addWorkout, deleteWorkout,
-        getNextWorkoutID,
-        getPrevWorkoutID,
+        getNextWorkoutId,
+        getPrevWorkoutId,
         getWorkoutsResults, setWorkoutChanges} from './database.js'
 
 const app = express();
@@ -43,7 +43,7 @@ function jwtTokenAuth(req, res, next){
   }
 }
 
-app.get('/auth/refreshToken', async (req, res) => {
+app.get('/api/auth/refresh_token', async (req, res) => {
 
   const refreshToken = req.cookies.refreshToken;
 
@@ -82,7 +82,7 @@ app.get('/auth/refreshToken', async (req, res) => {
   
 })
 
-app.post('/api/checkUserData', async (req, res) => {
+app.post('/api/auth/login', async (req, res) => {
 
   const { email, password } = req.body;
 
@@ -129,7 +129,7 @@ app.post('/api/checkUserData', async (req, res) => {
   }
 });
 
-app.post('/api/registerUser', async (req, res) => {
+app.post('/api/auth/register', async (req, res) => {
   const { first_name, surname, email, password} = req.body;
   const password_hash = await bcrypt.hash(password, 10);
   const result = await createUser(first_name, surname, email, password_hash);
@@ -141,92 +141,91 @@ app.post('/api/registerUser', async (req, res) => {
   }
 });
 
-app.get('/api/isUserLoggedIn', jwtTokenAuth, (req, res) => {
+app.get('/api/auth/status', jwtTokenAuth, (req, res) => {
   return res.status(200).json({ success: true })
 });
 
-app.get('/api/logout', (req, res) => {
+app.get('/api/auth/logout', (req, res) => {
   if(req.cookies.accessToken) res.clearCookie("accessToken");
   if(req.cookies.refreshToken) res.clearCookie("refreshToken");
     return res.status(200).json({success: true});
   }
 );
   
-app.get('/api/getUsers', async (req, res) => {
+app.get('/api/users', async (req, res) => {
     const result = await getUsers();
     return res.status(200).json({result, success: true});
 });
 
-app.get('/api/getName', jwtTokenAuth, (req, res) => {
+app.get('/api/user_name', jwtTokenAuth, (req, res) => {
   return res.status(200).json({userName: req.user.name, success: true});
 })
 
-app.get('/api/calendar/getWorkouts', jwtTokenAuth, async (req, res) => {
+app.get('/api/workouts', jwtTokenAuth, async (req, res) => {
   const result = await getWorkouts(req.user.id);
   return res.status(200).json({success: true, workouts: result});
 
 })
 
-app.get('/api/getWorkout/:userWorkoutid', jwtTokenAuth, async (req, res) => {
-  const {userWorkoutid} = req.params;
-  let result = await getWorkout(userWorkoutid, req.user.id);
-  const nextWorkoutID = await getNextWorkoutID(userWorkoutid, req.user.id);
-  const prevWorkoutID = await getPrevWorkoutID(userWorkoutid, req.user.id);
+app.get('/api/workout/:id', jwtTokenAuth, async (req, res) => {
+  const userWorkoutId = req.params.id;
+  let result = await getWorkout(userWorkoutId, req.user.id);
+  const nextWorkoutId = await getNextWorkoutId(userWorkoutId, req.user.id);
+  const prevWorkoutId = await getPrevWorkoutId(userWorkoutId, req.user.id);
 
   if(!result) {
     return res.status(404).json({succes: false});
   }
 
-  return res.status(200).json({success: true, result: result, nextWorkoutID, prevWorkoutID});
+  return res.status(200).json({success: true, result: result, nextWorkoutId, prevWorkoutId});
 
 })
 
-app.post('/api/setWorkoutDone', jwtTokenAuth, async (req, res) => {
+app.post('/api/workout/:id/complete', jwtTokenAuth, async (req, res) => {
   const exercises = req.body;
   if(exercises.length === 0){
     return res.status(400).json({success: false, message: "Invalid data"})
   }
-  const {userWorkoutID} = req.body[0];
+  const userWorkoutId = req.params.id;
   console.log(exercises);
-  const userID = req.user.id;
-  const result = await setUserWorkoutDone(userID, userWorkoutID, exercises);
-  console.log(result);
+  const userId = req.user.id;
+  const result = await setUserWorkoutDone(userId, userWorkoutId, exercises);
   return res.status(200).json({success: true});
 
   
 })
 
-app.get('/api/getExercises', jwtTokenAuth, async (req, res) => {
+app.get('/api/exercises', jwtTokenAuth, async (req, res) => {
   const result = await getExercises();
   return res.status(200).json({success: true, result: result});
 })
 
-app.post('/api/setNewWorkout', jwtTokenAuth, async(req, res) => {
+app.post('/api/workout', jwtTokenAuth, async(req, res) => {
   const {workoutData, workoutRows} = req.body;
   console.log(typeof workoutRows);
   const result = await addWorkout(workoutData.date, workoutData.workout_title, workoutRows, req.user.id);
   return res.status(200).json({success: true, result });
 })
 
-app.post('/api/setWorkoutChanges/:id', jwtTokenAuth, async(req, res) => {
-  const userWorkoutID = req.params.id;
+app.put('/api/workout/:id', jwtTokenAuth, async(req, res) => {
+  const userWorkoutId = req.params.id;
   const {workoutData, workoutRows} = req.body;
-  const workoutID = workoutData.workout_id;
+  const workoutId = workoutData.workout_id;
   console.log(workoutData, workoutRows);
-  const result = await setWorkoutChanges(userWorkoutID, workoutID, workoutData.workout_title, workoutData.workout_date, workoutRows, req.user.id);
+  const result = await setWorkoutChanges(userWorkoutId, workoutId, workoutData.workout_title, workoutData.workout_date, workoutRows, req.user.id);
   return res.status(200).json({success: true, result: result});
 })
 
-app.delete('/api/deleteWorkout/:id', jwtTokenAuth, async (req, res) => {
+app.delete('/api/workout/:id', jwtTokenAuth, async (req, res) => {
   const user_workout_id  = req.params.id;
   console.log("workout id: " + user_workout_id);
   const result = await deleteWorkout(user_workout_id, req.user.id);
   return res.status(200).json({success: true, result: result});
 })
 
-app.get('/api/getWorkoutsResults', jwtTokenAuth, async (req, res) => {
-  const userID = req.user.id;
-  const result = await getWorkoutsResults(userID);
+app.get('/api/workout_results', jwtTokenAuth, async (req, res) => {
+  const userId = req.user.id;
+  const result = await getWorkoutsResults(userId);
   return res.status(200).json({success: true, result});
 })
 

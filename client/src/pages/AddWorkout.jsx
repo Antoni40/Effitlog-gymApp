@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from '../scss/ExerciseForm.module.scss';
-import {Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import Navbar from '../components/NavigationBar';
 import '../scss/main.scss';
 import fetchHelper from '../utils/fetchHelper.js';
@@ -17,7 +17,7 @@ function AddWorkout(){
   useEffect(() => {
     async function getExercises(){
       try {
-        const res_data = await fetchHelper('http://localhost:8080/api/getExercises', {method: 'GET'});
+        const res_data = await fetchHelper('http://localhost:8080/api/exercises', {method: 'GET'});
 
         if(!res_data.success) {
           throw new Error("Internal server error");
@@ -41,7 +41,7 @@ function AddWorkout(){
     e.preventDefault();
 
     try {
-      const res_data = await fetchHelper('http://localhost:8080/api/setNewWorkout', {
+      const res_data = await fetchHelper('http://localhost:8080/api/workout', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -69,17 +69,22 @@ function AddWorkout(){
   
   function handleInputChange(index, field, value) {
     setWorkoutRows(prev => 
-      prev.map((row, i) => 
-        i === index ? {...row, [field]: value} : row
-      )
+      prev.map((row, i) => {
+        if(i !== index) return row;
+        if((field === "sets" || field === "reps") && value< 0) {
+            return row;
+        }
+
+        return {...row, [field]: value};
+      })
     );
   }
 
   function handleWorkoutDataChange(field, value){
-    setWorkoutData(prev => ({
-      ...prev,
-      [field]: value
-    }))
+      setWorkoutData(prev => ({
+        ...prev,
+        [field]: value
+      }))
   }
 
 

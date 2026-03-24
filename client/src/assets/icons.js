@@ -7,14 +7,14 @@ import calves from './icons/calves-marked.png';
 import chest from './icons/chest-marked.png';
 import forearms from './icons/forearm-marked.png';
 import glutes from './icons/glutes-marked.png';
-import harmstrings from './icons/harmstrings-marked.png';
+import hamstrings from './icons/harmstrings-marked.png';
 import lower_back from './icons/lower-back-marked.png';
 import quads from './icons/quads-marked.png';
 import shoulders from './icons/shoulders-marked.png';
 import trapezius from './icons/trapezius-marked.png';
 import triceps from './icons/triceps-marked.png';
 
-const iconsUpperBody = {
+export const iconsUpperBody = {
   chest,
   shoulders,
   biceps,
@@ -26,13 +26,11 @@ const iconsUpperBody = {
   triceps
 }
 
-const iconsLowerBody = {
+export const iconsLowerBody = {
   quads,
   abductors,
   adductors,
   glutes,
   calves,
-  harmstrings
+  hamstrings
 }
-
-export {iconsUpperBody, iconsLowerBody};

@@ -20,6 +20,7 @@ ChartJS.register(
 );
 
 function BarChart(props) {
+  
   const data = {
     labels: props.labels,
     datasets: [

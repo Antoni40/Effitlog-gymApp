@@ -1,9 +1,9 @@
 import { useRef, useEffect, useState } from 'react';
 import styles from '../scss/Dashboard.module.scss';
 import { useNavigate, Link } from 'react-router-dom';
-import BarChart from './BarChart.jsx';
+import BarChart from '../components/BarChart.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faPencil, faTrash, faCalendar, faGear } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faPencil, faTrash, faCalendar } from '@fortawesome/free-solid-svg-icons'
 import Navbar from '../components/NavigationBar.jsx';
 import '../scss/main.scss';
 import fetchHelper from '../utils/fetchHelper.js';
@@ -23,13 +23,12 @@ function Dashboard(){
 
   const labels = workoutsResults.map((el) => el.workout_date);
   const total_weights = workoutsResults.map((el) => el.workout_weight);
-  const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
  
   useEffect(() => {
 
     async function getName(){
       try {
-        const res_data = await fetchHelper('http://localhost:8080/api/getName', {method: 'GET'});
+        const res_data = await fetchHelper('http://localhost:8080/api/user_name', {method: 'GET'});
 
         if(!res_data.success) {
           throw new Error("Internal server error");
@@ -53,7 +52,7 @@ function Dashboard(){
 
     async function getWorkoutsResults(){
       try {
-        const res_data = await fetchHelper('http://localhost:8080/api/getWorkoutsResults', {method: 'GET'});
+        const res_data = await fetchHelper('http://localhost:8080/api/workout_results', {method: 'GET'});
 
         if(!res_data.success) {
           throw new Error("Internal server error");
@@ -98,7 +97,7 @@ function Dashboard(){
   useEffect(() => {
     async function getWorkouts(){
       try {
-        const res_data = await fetchHelper('http://localhost:8080/api/calendar/getWorkouts', {method: 'GET'});
+        const res_data = await fetchHelper('http://localhost:8080/api/workouts', {method: 'GET'});
 
         if(!res_data.success) {
           throw new Error("Internal server error");
@@ -120,7 +119,7 @@ function Dashboard(){
 
   async function logOut() {
     try {
-      const res = await fetch('http://localhost:8080/api/logout', {
+      const res = await fetch('http://localhost:8080/api/auth/logout', {
         method: 'GET',
         credentials: 'include'
       })
@@ -188,8 +187,12 @@ function Dashboard(){
           <div className={styles.pageContentContainer}>
             <header className={styles.greeting}>
               <h1>Welcome back, {name}!</h1>
-              <p>Workouts completed: {workoutsResults.length}</p>
-              <p>Last workout: {workoutsResults[workoutsResults.length - 1]?.workout_date}</p>  
+              {workoutsResults.length > 0 ? 
+                <div>
+                  <p>Workouts completed: {workoutsResults.length}</p>
+                  <p>Last workout: {workoutsResults[workoutsResults.length - 1]?.workout_date}</p> 
+                </div>
+              : ""}  
             </header>
 
             <div className={styles.mainBlocksContainer}>
@@ -222,7 +225,7 @@ function Dashboard(){
               <section className={styles.progressContainer}>
                 <h2>Progress</h2>
                   <div className={styles.chartContainer}>
-                    <BarChart data={total_weights.slice(-4)} labels={labels.slice(-4)} data_title={"Total used weight in workouts"} title={"Progress over time"}/>
+                    <BarChart data={total_weights.slice(-4)} labels={labels.slice(-4)} data_title={"weight (kg)"} title={"Progress over time"}/>
                   </div>
                   <div>
                   <div ref={BMIContainer} 
@@ -264,7 +267,7 @@ function Dashboard(){
                           </div>
                       </div>
 
-                      <button>Show BMI</button>
+                      <button>Show</button>
                       </form>
 
                       <div ref={BMIdiv} className={styles.BMIdiv}>

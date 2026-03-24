@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import styles from '../scss/Navbar.module.scss';
-import icon from '../assets/app_logo.png';
 
 function Navbar({links}){
   return(

@@ -8,7 +8,6 @@ import fetchHelper from "../utils/fetchHelper.js";
 function Calendar(){
   const navigate = useNavigate();
   const [workouts, setWorkouts] = useState([]);
-  const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
   useEffect(() => {
     fetchWorkouts();
@@ -16,7 +15,7 @@ function Calendar(){
 
   async function fetchWorkouts(){
     try {
-      const res_data = await fetchHelper('http://localhost:8080/api/calendar/getWorkouts', {method: 'GET'})
+      const res_data = await fetchHelper('http://localhost:8080/api/workouts', {method: 'GET'})
       if(!res_data.success) {
         throw new Error("Internal server error");
       }
@@ -32,8 +31,11 @@ function Calendar(){
   }
 
   async function deleteWorkout(id){
+    if(!confirm("Delete this workout? You won't be able to get it back!")) {
+      return;
+    }
     try {
-      const res_data = await fetchHelper(`http://localhost:8080/api/deleteWorkout/${id}`, {method: 'DELETE'});
+      const res_data = await fetchHelper(`http://localhost:8080/api/workout/${id}`, {method: 'DELETE'});
       if(!res_data.success) {
         throw new Error("Internal server error");
       }
@@ -67,11 +69,11 @@ function Calendar(){
               </p>
               <div className={styles.actionsContainer}>
 
-                <button onClick={() => {navigate(`/workouts/${workout.user_workout_id}/edit`)}}
-                className={styles.modifyWorkoutBtn}>Modify Workout</button>
-
                 <button onClick={() => {navigate(`/workouts/${workout.user_workout_id}`)}}
-                className={styles.modifyWorkoutBtn}>Start workout</button>
+                className={styles.startWorkoutBtn}>Start workout</button>
+
+                <button onClick={() => {navigate(`/workouts/${workout.user_workout_id}/edit`)}}
+                className={styles.modifyWorkoutBtn}>Modify workout</button>
 
                 <button onClick={() => {deleteWorkout(workout.user_workout_id)}}
                 className={styles.deleteWorkoutBtn}>Delete workout</button>

@@ -1,4 +1,4 @@
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate} from "react-router-dom";
 import { useState, useEffect } from "react";
 import styles from '../scss/ExerciseForm.module.scss';
 import Navbar from "../components/NavigationBar";
@@ -13,26 +13,26 @@ function EditWorkout(){
     {exercise_id: 0, sets: 0, reps: 0, exercise_order: 0}
   ]); 
   const [workoutData, setWorkoutData] = useState({
-    workout_title: '', workout_date: '', nextWorkoutID: id, prevWorkoutID: id
+    workout_title: '', workout_date: '', nextWorkoutId: id, prevWorkoutId: id
   });
 
   useEffect(() => {
     async function getWorkout() {
       try {
-        const res_data = await fetchHelper(`http://localhost:8080/api/getWorkout/${id}`, {method: 'GET'});
+        const res_data = await fetchHelper(`http://localhost:8080/api/workout/${id}`, {method: 'GET'});
 
         if(!res_data.success){
           throw new Error("Internal server error");
         }
 
         const exercises = res_data.result; 
-        let nextWorkoutID = res_data.nextWorkoutID ? res_data.nextWorkoutID : id;
-        let prevWorkoutID = res_data.prevWorkoutID ? res_data.prevWorkoutID : id;
+        let nextWorkoutId = res_data.nextWorkoutId ? res_data.nextWorkoutId : id;
+        let prevWorkoutId = res_data.prevWorkoutId ? res_data.prevWorkoutId : id;
 
         setWorkoutData({workout_id: exercises[0].workout_id, 
           workout_title: exercises[0].workout_name, 
           workout_date: exercises[0].date, 
-          nextWorkoutID, prevWorkoutID});
+          nextWorkoutId, prevWorkoutId});
 
         setWorkoutRows(exercises);
 
@@ -49,7 +49,7 @@ function EditWorkout(){
   useEffect(() => {
     async function getExercises() {
       try {
-      const res_data = await fetchHelper('http://localhost:8080/api/getExercises', {method: 'GET'})
+      const res_data = await fetchHelper(`http://localhost:8080/api/exercises`, {method: 'GET'})
 
         if(!res_data.success) {
             throw new Error("Internal server error");
@@ -68,17 +68,22 @@ function EditWorkout(){
 
   function handleInputChange(index, field, value) {
     setWorkoutRows(prev => 
-      prev.map((row, i) => 
-        i === index ? {...row, [field]: value} : row
-      )
+      prev.map((row, i) => {
+        if(i !== index) return row;
+        if((field === "sets" || field === "reps") && value < 0) {
+            return row;
+        } 
+
+        return {...row, [field]: value};
+      })
     );
   }
 
   function handleWorkoutDataChange(field, value){
-    setWorkoutData(prev => ({
-      ...prev,
-      [field]: value
-    }))
+      setWorkoutData(prev => ({
+        ...prev,
+        [field]: value
+      }))
   }
 
 
@@ -86,7 +91,7 @@ function EditWorkout(){
 
     e.preventDefault();
     try {
-      const res_data = await fetchHelper(`http://localhost:8080/api/setWorkoutChanges/${id}`, {
+      const res_data = await fetchHelper(`http://localhost:8080/api/workout/${id}/complete`, {
         method: "POST",
         headers: { "Content-Type": "application/json"},
         credentials: "include",
@@ -115,8 +120,8 @@ function EditWorkout(){
   return(
     <>
       <Navbar links={[
-        {name: "Previous workout", path: `/workouts/${workoutData.prevWorkoutID}/edit`},
-        {name: "Next workout", path: `/workouts/${workoutData.nextWorkoutID}/edit`},
+        {name: "Previous workout", path: `/workouts/${workoutData.prevWorkoutId}/edit`},
+        {name: "Next workout", path: `/workouts/${workoutData.nextWorkoutId}/edit`},
         {name: "Go back to dashboard", path: "/dashboard"}
       ]} />
       
