@@ -43,7 +43,7 @@ npm run dev
 ```
 #### 2. Run frontend
 ```bash
-cd ../client/react-app
+cd client
 npm run dev
 ```
 
