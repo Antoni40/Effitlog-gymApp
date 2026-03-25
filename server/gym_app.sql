@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sty 20, 2026 at 08:03 PM
+-- Generation Time: Mar 25, 2026 at 07:08 AM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.0.30
 
@@ -33,26 +33,6 @@ CREATE TABLE `exercises` (
   `muscle_group` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `exercises`
---
-
-INSERT INTO `exercises` (`id`, `name`, `muscle_group`) VALUES
-(1, 'bench press', 'chest'),
-(2, 'Squat', 'legs'),
-(3, 'Deadlift', 'back'),
-(4, 'Overhead Press', 'shoulders'),
-(5, 'Pull Up', 'back'),
-(6, 'Dumbbell Row', 'back'),
-(7, 'Lunges', 'legs'),
-(8, 'Bicep Curl', 'biceps'),
-(9, 'Tricep Dip', 'triceps'),
-(10, 'Lateral Raise', 'shoulders'),
-(11, 'Leg Press', 'legs'),
-(12, 'Plank', 'core'),
-(13, 'Push Up', 'chest'),
-(14, 'Incline Dumbbell Press', 'chest');
-
 -- --------------------------------------------------------
 
 --
@@ -68,6 +48,8 @@ CREATE TABLE `exercises_in_workouts` (
   `exercise_order` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
 -- Struktura tabeli dla tabeli `users`
 --
@@ -80,6 +62,8 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
 -- Struktura tabeli dla tabeli `users_workouts`
 --
@@ -89,9 +73,15 @@ CREATE TABLE `users_workouts` (
   `user_id` int(11) NOT NULL,
   `workout_id` int(11) NOT NULL,
   `workout_date` date DEFAULT curdate(),
-  `workout_comment` text DEFAULT NULL
+  `workout_comment` text DEFAULT NULL,
+  `is_completed` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `workouts`
+--
 
 CREATE TABLE `workouts` (
   `id` int(11) NOT NULL,
@@ -101,11 +91,17 @@ CREATE TABLE `workouts` (
   `difficulty` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `workouts_results`
+--
+
 CREATE TABLE `workouts_results` (
   `id` int(11) NOT NULL,
   `user_workout_id` int(11) NOT NULL,
   `exercise_id` int(11) NOT NULL,
-  `set_nr` int(11) DEFAULT NULL,
+  `sets` int(11) DEFAULT NULL,
   `reps` int(11) DEFAULT NULL,
   `used_weight` decimal(5,2) DEFAULT NULL,
   `difficulty` int(11) DEFAULT NULL
@@ -166,31 +162,31 @@ ALTER TABLE `workouts_results`
 -- AUTO_INCREMENT for table `exercises`
 --
 ALTER TABLE `exercises`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `exercises_in_workouts`
 --
 ALTER TABLE `exercises_in_workouts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users_workouts`
 --
 ALTER TABLE `users_workouts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `workouts`
 --
 ALTER TABLE `workouts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `workouts_results`
