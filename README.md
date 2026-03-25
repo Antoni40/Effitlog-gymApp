@@ -19,7 +19,7 @@ The app communicates with a **MySQL database** through a **REST API** built with
 
 ### 1. Install frontend dependencies
 ```bash
-cd ../client/react-app
+cd client
 npm install
 ```
 
